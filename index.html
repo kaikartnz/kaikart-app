@@ -1,2310 +1,438 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>KaiKart - NZ Food Delivery Platform</title>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
-    <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
-        
-        :root {
-            --primary: #FF6B35;
-            --primary-dark: #E55A2B;
-            --secondary: #004E89;
-            --success: #1A936F;
-            --warning: #F9A825;
-            --danger: #E53935;
-            --bg: #F7F7F7;
-            --card-bg: #FFFFFF;
-            --text: #1A1A1A;
-            --text-secondary: #666666;
-            --border: #E5E5E5;
-            --shadow: 0 2px 8px rgba(0,0,0,0.08);
-            --shadow-lg: 0 4px 20px rgba(0,0,0,0.12);
-            --driver: #006BA8;
-            --merchant: #7B1FA2;
-            --admin: #C62828;
-        }
-        
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Inter', sans-serif;
-        }
-        
-        body {
-            background: var(--bg);
-            color: var(--text);
-            line-height: 1.6;
-        }
-        
-        body.role-eater { --primary: #FF6B35; }
-        body.role-driver { --primary: var(--driver); }
-        body.role-merchant { --primary: var(--merchant); }
-        body.role-admin { --primary: var(--admin); }
-        
-        .app-container {
-            max-width: 100%;
-            min-height: 100vh;
-            position: relative;
-        }
-        
-        .top-nav {
-            background: var(--card-bg);
-            padding: 16px 24px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            box-shadow: var(--shadow);
-            position: sticky;
-            top: 0;
-            z-index: 100;
-        }
-        
-        .logo {
-            font-size: 24px;
-            font-weight: 800;
-            color: var(--primary);
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            cursor: pointer;
-        }
-        
-        .nav-links {
-            display: flex;
-            gap: 24px;
-            align-items: center;
-        }
-        
-        .nav-link {
-            color: var(--text-secondary);
-            text-decoration: none;
-            font-weight: 500;
-            cursor: pointer;
-            transition: color 0.2s;
-        }
-        
-        .nav-link:hover, .nav-link.active {
-            color: var(--primary);
-        }
-        
-        .btn {
-            padding: 10px 20px;
-            border-radius: 8px;
-            border: none;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.2s;
-            font-size: 14px;
-        }
-        
-        .btn-primary {
-            background: var(--primary);
-            color: white;
-        }
-        
-        .btn-primary:hover {
-            transform: translateY(-1px);
-            box-shadow: 0 4px 12px rgba(255,107,53,0.3);
-        }
-        
-        .btn-outline {
-            background: transparent;
-            border: 2px solid var(--border);
-            color: var(--text);
-        }
-        
-        .btn-outline:hover {
-            border-color: var(--primary);
-            color: var(--primary);
-        }
-        
-        .btn-ghost {
-            background: transparent;
-            color: var(--text-secondary);
-        }
-        
-        .hero {
-            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
-            color: white;
-            padding: 80px 24px;
-            text-align: center;
-            position: relative;
-            overflow: hidden;
-        }
-        
-        .hero::before {
-            content: '';
-            position: absolute;
-            top: -50%;
-            right: -10%;
-            width: 600px;
-            height: 600px;
-            background: rgba(255,255,255,0.1);
-            border-radius: 50%;
-        }
-        
-        .hero-content {
-            position: relative;
-            z-index: 1;
-            max-width: 800px;
-            margin: 0 auto;
-        }
-        
-        .hero h1 {
-            font-size: 48px;
-            font-weight: 800;
-            margin-bottom: 16px;
-            line-height: 1.2;
-        }
-        
-        .hero p {
-            font-size: 20px;
-            opacity: 0.9;
-            margin-bottom: 32px;
-        }
-        
-        .hero-cta {
-            display: flex;
-            gap: 16px;
-            justify-content: center;
-            flex-wrap: wrap;
-        }
-        
-        .btn-white {
-            background: white;
-            color: var(--primary);
-            padding: 14px 32px;
-            font-size: 16px;
-        }
-        
-        .btn-white-outline {
-            background: transparent;
-            color: white;
-            border: 2px solid white;
-            padding: 14px 32px;
-            font-size: 16px;
-        }
-        
-        .role-selector {
-            padding: 60px 24px;
-            background: var(--bg);
-        }
-        
-        .section-header {
-            text-align: center;
-            margin-bottom: 48px;
-        }
-        
-        .section-header h2 {
-            font-size: 32px;
-            font-weight: 700;
-            margin-bottom: 12px;
-        }
-        
-        .section-header p {
-            color: var(--text-secondary);
-            font-size: 18px;
-        }
-        
-        .role-cards {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 24px;
-            max-width: 1200px;
-            margin: 0 auto;
-        }
-        
-        .role-card {
-            background: var(--card-bg);
-            border-radius: 16px;
-            padding: 32px;
-            box-shadow: var(--shadow);
-            cursor: pointer;
-            transition: all 0.3s;
-            border: 2px solid transparent;
-            position: relative;
-            overflow: hidden;
-        }
-        
-        .role-card:hover {
-            transform: translateY(-4px);
-            box-shadow: var(--shadow-lg);
-        }
-        
-        .role-card.active {
-            border-color: var(--primary);
-        }
-        
-        .role-icon {
-            width: 64px;
-            height: 64px;
-            border-radius: 16px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 28px;
-            margin-bottom: 20px;
-        }
-        
-        .role-card.eater .role-icon { background: #FFF3E0; color: #FF6B35; }
-        .role-card.driver .role-icon { background: #E3F2FD; color: #006BA8; }
-        .role-card.merchant .role-icon { background: #F3E5F5; color: #7B1FA2; }
-        .role-card.admin .role-icon { background: #FFEBEE; color: #C62828; }
-        
-        .role-card h3 {
-            font-size: 24px;
-            font-weight: 700;
-            margin-bottom: 8px;
-        }
-        
-        .role-card p {
-            color: var(--text-secondary);
-            margin-bottom: 20px;
-            line-height: 1.5;
-        }
-        
-        .role-features {
-            list-style: none;
-            margin-bottom: 24px;
-        }
-        
-        .role-features li {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            margin-bottom: 8px;
-            font-size: 14px;
-            color: var(--text-secondary);
-        }
-        
-        .role-features i {
-            color: var(--success);
-            font-size: 12px;
-        }
-        
-        .role-badge {
-            position: absolute;
-            top: 16px;
-            right: 16px;
-            background: var(--success);
-            color: white;
-            padding: 4px 12px;
-            border-radius: 20px;
-            font-size: 12px;
-            font-weight: 600;
-        }
-        
-        .page {
-            display: none;
-            min-height: 100vh;
-            background: var(--bg);
-        }
-        
-        .page.active {
-            display: block;
-            animation: fadeIn 0.3s ease-out;
-        }
-        
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-        
-        .form-container {
-            max-width: 480px;
-            margin: 40px auto;
-            background: var(--card-bg);
-            padding: 40px;
-            border-radius: 16px;
-            box-shadow: var(--shadow);
-        }
-        
-        .form-header {
-            text-align: center;
-            margin-bottom: 32px;
-        }
-        
-        .form-header h2 {
-            font-size: 28px;
-            font-weight: 700;
-            margin-bottom: 8px;
-        }
-        
-        .form-header p {
-            color: var(--text-secondary);
-        }
-        
-        .form-group {
-            margin-bottom: 20px;
-        }
-        
-        .form-group label {
-            display: block;
-            margin-bottom: 8px;
-            font-weight: 500;
-            font-size: 14px;
-        }
-        
-        .form-group input,
-        .form-group select,
-        .form-group textarea {
-            width: 100%;
-            padding: 12px 16px;
-            border: 1px solid var(--border);
-            border-radius: 8px;
-            font-size: 15px;
-            transition: border-color 0.2s;
-        }
-        
-        .form-group input:focus,
-        .form-group select:focus {
-            outline: none;
-            border-color: var(--primary);
-        }
-        
-        .form-row {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 16px;
-        }
-        
-        .checkbox-group {
-            display: flex;
-            align-items: start;
-            gap: 12px;
-            margin-bottom: 20px;
-        }
-        
-        .checkbox-group input {
-            margin-top: 4px;
-        }
-        
-        .checkbox-group label {
-            font-size: 14px;
-            color: var(--text-secondary);
-            line-height: 1.4;
-        }
-        
-        .checkbox-group a {
-            color: var(--primary);
-            text-decoration: none;
-        }
-        
-        .progress-steps {
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: 40px;
-            position: relative;
-        }
-        
-        .progress-steps::before {
-            content: '';
-            position: absolute;
-            top: 20px;
-            left: 0;
-            right: 0;
-            height: 2px;
-            background: var(--border);
-            z-index: 0;
-        }
-        
-        .step {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 8px;
-            position: relative;
-            z-index: 1;
-            background: var(--card-bg);
-            padding: 0 8px;
-        }
-        
-        .step-number {
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            background: var(--border);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: 700;
-            color: var(--text-secondary);
-            transition: all 0.3s;
-        }
-        
-        .step.active .step-number,
-        .step.completed .step-number {
-            background: var(--primary);
-            color: white;
-        }
-        
-        .step-label {
-            font-size: 12px;
-            font-weight: 600;
-            color: var(--text-secondary);
-        }
-        
-        .step.active .step-label {
-            color: var(--primary);
-        }
-        
-        .upload-zone {
-            border: 2px dashed var(--border);
-            border-radius: 12px;
-            padding: 40px;
-            text-align: center;
-            cursor: pointer;
-            transition: all 0.2s;
-            background: var(--bg);
-        }
-        
-        .upload-zone:hover {
-            border-color: var(--primary);
-            background: rgba(255,107,53,0.05);
-        }
-        
-        .upload-zone i {
-            font-size: 48px;
-            color: var(--text-secondary);
-            margin-bottom: 16px;
-        }
-        
-        .upload-zone p {
-            color: var(--text-secondary);
-            margin-bottom: 8px;
-        }
-        
-        .upload-zone .upload-hint {
-            font-size: 12px;
-            color: #999;
-        }
-        
-        .dashboard {
-            display: grid;
-            grid-template-columns: 260px 1fr;
-            min-height: 100vh;
-        }
-        
-        .sidebar {
-            background: var(--card-bg);
-            border-right: 1px solid var(--border);
-            padding: 24px;
-            position: fixed;
-            height: 100vh;
-            width: 260px;
-            overflow-y: auto;
-        }
-        
-        .sidebar-logo {
-            font-size: 24px;
-            font-weight: 800;
-            color: var(--primary);
-            margin-bottom: 40px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-        
-        .nav-section {
-            margin-bottom: 32px;
-        }
-        
-        .nav-section-title {
-            font-size: 12px;
-            font-weight: 600;
-            color: var(--text-secondary);
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            margin-bottom: 12px;
-            padding-left: 12px;
-        }
-        
-        .nav-item {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            padding: 12px;
-            border-radius: 8px;
-            cursor: pointer;
-            transition: all 0.2s;
-            color: var(--text-secondary);
-            margin-bottom: 4px;
-        }
-        
-        .nav-item:hover, .nav-item.active {
-            background: rgba(255,107,53,0.1);
-            color: var(--primary);
-        }
-        
-        .nav-item i {
-            width: 20px;
-            text-align: center;
-        }
-        
-        .main-content {
-            margin-left: 260px;
-            padding: 32px;
-        }
-        
-        .page-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 32px;
-        }
-        
-        .page-header h1 {
-            font-size: 32px;
-            font-weight: 700;
-        }
-        
-        .stats-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-            gap: 24px;
-            margin-bottom: 32px;
-        }
-        
-        .stat-card {
-            background: var(--card-bg);
-            padding: 24px;
-            border-radius: 12px;
-            box-shadow: var(--shadow);
-        }
-        
-        .stat-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: start;
-            margin-bottom: 16px;
-        }
-        
-        .stat-title {
-            color: var(--text-secondary);
-            font-size: 14px;
-            font-weight: 500;
-        }
-        
-        .stat-icon {
-            width: 40px;
-            height: 40px;
-            border-radius: 8px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 20px;
-        }
-        
-        .stat-value {
-            font-size: 32px;
-            font-weight: 700;
-            margin-bottom: 8px;
-        }
-        
-        .stat-change {
-            font-size: 14px;
-            color: var(--success);
-            font-weight: 600;
-        }
-        
-        .stat-change.negative {
-            color: var(--danger);
-        }
-        
-        .data-table {
-            background: var(--card-bg);
-            border-radius: 12px;
-            overflow: hidden;
-            box-shadow: var(--shadow);
-        }
-        
-        .table-header {
-            padding: 20px 24px;
-            border-bottom: 1px solid var(--border);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-        
-        .table-header h3 {
-            font-size: 18px;
-            font-weight: 700;
-        }
-        
-        table {
-            width: 100%;
-            border-collapse: collapse;
-        }
-        
-        th, td {
-            padding: 16px 24px;
-            text-align: left;
-            font-size: 14px;
-        }
-        
-        th {
-            background: var(--bg);
-            font-weight: 600;
-            color: var(--text-secondary);
-            text-transform: uppercase;
-            font-size: 12px;
-            letter-spacing: 0.5px;
-        }
-        
-        tr {
-            border-bottom: 1px solid var(--border);
-        }
-        
-        tr:last-child {
-            border-bottom: none;
-        }
-        
-        .status-badge {
-            padding: 4px 12px;
-            border-radius: 20px;
-            font-size: 12px;
-            font-weight: 600;
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-        }
-        
-        .status-badge.active {
-            background: #E8F5E9;
-            color: var(--success);
-        }
-        
-        .status-badge.pending {
-            background: #FFF3E0;
-            color: var(--warning);
-        }
-        
-        .status-badge.suspended {
-            background: #FFEBEE;
-            color: var(--danger);
-        }
-        
-        .user-info {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
-        
-        .user-avatar {
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            background: var(--primary);
-            color: white;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: 600;
-        }
-        
-        .user-details h4 {
-            font-weight: 600;
-            margin-bottom: 2px;
-        }
-        
-        .user-details span {
-            font-size: 13px;
-            color: var(--text-secondary);
-        }
-        
-        .verification-card {
-            background: var(--card-bg);
-            border-radius: 12px;
-            padding: 24px;
-            margin-bottom: 16px;
-            box-shadow: var(--shadow);
-            display: flex;
-            align-items: center;
-            gap: 20px;
-        }
-        
-        .verification-icon {
-            width: 56px;
-            height: 56px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 24px;
-            flex-shrink: 0;
-        }
-        
-        .verification-icon.completed {
-            background: #E8F5E9;
-            color: var(--success);
-        }
-        
-        .verification-icon.pending {
-            background: #FFF3E0;
-            color: var(--warning);
-        }
-        
-        .verification-icon.locked {
-            background: var(--bg);
-            color: var(--text-secondary);
-        }
-        
-        .verification-content {
-            flex: 1;
-        }
-        
-        .verification-content h4 {
-            font-weight: 600;
-            margin-bottom: 4px;
-        }
-        
-        .verification-content p {
-            font-size: 14px;
-            color: var(--text-secondary);
-        }
-        
-        .verification-action {
-            margin-left: auto;
-        }
-        
-        @media (max-width: 768px) {
-            .dashboard {
-                grid-template-columns: 1fr;
+    <script>
+        // Data
+        const restaurants = [
+            {
+                id: 1,
+                name: "BurgerFuel Ponsonby",
+                image: "https://images.unsplash.com/photo-1572802419224-296b0aeee0d9?w=800&auto=format&fit=crop",
+                rating: 4.7,
+                time: "20-30 min",
+                delivery: "$3.99",
+                category: "burgers",
+                tags: ["Gourmet", "Kiwi Owned"],
+                menu: [
+                    { name: "Bastard Burger", price: 18.90, desc: "Beef, avocado, mango, bacon & aioli", image: "https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=400" },
+                    { name: "Fuel Slider", price: 8.90, desc: "Mini burger with grass-fed beef", image: "https://images.unsplash.com/photo-1553979459-d2229ba7433b?w=400" },
+                    { name: "Kumara Fries", price: 6.50, desc: "Sweet potato fries with aioli", image: "https://images.unsplash.com/photo-1630384060421-cb20d0e0649d?w=400" },
+                    { name: "Shake", price: 7.90, desc: "Thick handmade shake", image: "https://images.unsplash.com/photo-1572490122747-3968b75cc699?w=400" }
+                ]
+            },
+            {
+                id: 2,
+                name: "The White Lady",
+                image: "https://images.unsplash.com/photo-1555396273-367ea4eb4db5?w=800&auto=format&fit=crop",
+                rating: 4.5,
+                time: "25-40 min",
+                delivery: "$4.99",
+                category: "burgers",
+                tags: ["Late Night", "Iconic"],
+                menu: [
+                    { name: "Classic Cheeseburger", price: 14.50, desc: "Beef patty, cheese, pickles, secret sauce", image: "https://images.unsplash.com/photo-1551782450-a2132b4ba21d?w=400" },
+                    { name: "Loaded Fries", price: 9.00, desc: "Cheese, bacon, sour cream & spring onions", image: "https://images.unsplash.com/photo-1585109649139-366815a0d713?w=400" }
+                ]
+            },
+            {
+                id: 3,
+                name: "Hell Pizza K Rd",
+                image: "https://images.unsplash.com/photo-1604382354936-07c5d9983bd3?w=800&auto=format&fit=crop",
+                rating: 4.6,
+                time: "30-45 min",
+                delivery: "$5.99",
+                category: "pizza",
+                tags: ["Spicy", "Vege Options"],
+                menu: [
+                    { name: "Pandemonium", price: 22.00, desc: "Pepperoni, bacon, ham & BBQ sauce", image: "https://images.unsplash.com/photo-1628840042765-356cda07504e?w=400" },
+                    { name: "Sinister", price: 20.00, desc: "Chicken, cream cheese, cranberry & spring onion", image: "https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?w=400" },
+                    { name: "Double Chocolate Thunder", price: 12.00, desc: "Chocolate pizza dessert", image: "https://images.unsplash.com/photo-1567620905732-2d1ec7ab7445?w=400" }
+                ]
+            },
+            {
+                id: 4,
+                name: "Auckland Fish Market",
+                image: "https://images.unsplash.com/photo-1579208575657-c595a05383b7?w=800&auto=format&fit=crop",
+                rating: 4.8,
+                time: "15-25 min",
+                delivery: "$2.99",
+                category: "fish",
+                tags: ["Fresh", "Local"],
+                menu: [
+                    { name: "Fish & Chips", price: 16.00, desc: "Hoki fillets with hand-cut chips", image: "https://images.unsplash.com/photo-1579208575657-c595a05383b7?w=400" },
+                    { name: "Seafood Chowder", price: 12.00, desc: "Creamy chowder with fresh seafood", image: "https://images.unsplash.com/photo-1551248429-40975aa4de74?w=400" },
+                    { name: "Oysters (Half Dozen)", price: 18.00, desc: "Fresh Pacific oysters", image: "https://images.unsplash.com/photo-1559339352-11d035aa65de?w=400" }
+                ]
+            },
+            {
+                id: 5,
+                name: "Best Ugly Bagels",
+                image: "https://images.unsplash.com/photo-1629115916087-7e8c114a24ed?w=800&auto=format&fit=crop",
+                rating: 4.9,
+                time: "10-20 min",
+                delivery: "$3.99",
+                category: "cafe",
+                tags: ["Wellington", "Fresh"],
+                menu: [
+                    { name: "Salmon Bagel", price: 15.50, desc: "House-smoked salmon, cream cheese, capers", image: "https://images.unsplash.com/photo-1629115916087-7e8c114a24ed?w=400" },
+                    { name: "Bacon & Egg", price: 13.50, desc: "Free-range egg, streaky bacon, tomato relish", image: "https://images.unsplash.com/photo-1525351484163-7529414344d8?w=400" },
+                    { name: "Flat White", price: 5.00, desc: "Kiwi style coffee", image: "https://images.unsplash.com/photo-1572442388796-11668a67e53d?w=400" }
+                ]
+            },
+            {
+                id: 6,
+                name: "Satya Spice",
+                image: "https://images.unsplash.com/photo-1585937421612-70a008356fbe?w=800&auto=format&fit=crop",
+                rating: 4.7,
+                time: "35-50 min",
+                delivery: "$4.99",
+                category: "indian",
+                tags: ["Authentic", "Spicy"],
+                menu: [
+                    { name: "Butter Chicken", price: 24.00, desc: "Creamy tomato curry with naan", image: "https://images.unsplash.com/photo-1585937421612-70a008356fbe?w=400" },
+                    { name: "Lamb Rogan Josh", price: 26.00, desc: "Kashmiri style lamb curry", image: "https://images.unsplash.com/photo-1565557623262-b51c2513a641?w=400" },
+                    { name: "Garlic Naan", price: 5.00, desc: "Fresh tandoor bread", image: "https://images.unsplash.com/photo-1601050690597-df0568f70950?w=400" }
+                ]
+            },
+            {
+                id: 7,
+                name: "The Sushi Train",
+                image: "https://images.unsplash.com/photo-1579871494447-9811cf80d66c?w=800&auto=format&fit=crop",
+                rating: 4.4,
+                time: "20-30 min",
+                delivery: "$3.99",
+                category: "sushi",
+                tags: ["Quick", "Healthy"],
+                menu: [
+                    { name: "Salmon Nigiri (6pc)", price: 14.00, desc: "Fresh salmon on sushi rice", image: "https://images.unsplash.com/photo-1579871494447-9811cf80d66c?w=400" },
+                    { name: "Dragon Roll", price: 18.00, desc: "Eel, avocado, cucumber", image: "https://images.unsplash.com/photo-1559410545-0bdcd187e0a6?w=400" },
+                    { name: "Miso Soup", price: 3.50, desc: "Traditional miso with tofu", image: "https://images.unsplash.com/photo-1547592166-23ac45744acd?w=400" }
+                ]
+            },
+            {
+                id: 8,
+                name: "Fairlie Bakehouse",
+                image: "https://images.unsplash.com/photo-1621996346565-e3dbc646d9a9?w=800&auto=format&fit=crop",
+                rating: 4.9,
+                time: "15-25 min",
+                delivery: "$4.99",
+                category: "bakery",
+                tags: ["South Island", "Famous"],
+                menu: [
+                    { name: "Bacon & Egg Pie", price: 9.50, desc: "NZ's best bacon & egg pie", image: "https://images.unsplash.com/photo-1621996346565-e3dbc646d9a9?w=400" },
+                    { name: "Mince & Cheese", price: 8.50, desc: "Classic Kiwi mince pie", image: "https://images.unsplash.com/photo-1565557623262-b51c2513a641?w=400" },
+                    { name: "Custard Square", price: 6.50, desc: "Vanilla custard with passionfruit icing", image: "https://images.unsplash.com/photo-1563729784474-d77dbb933a9e?w=400" }
+                ]
             }
-            
-            .sidebar {
-                display: none;
-            }
-            
-            .main-content {
-                margin-left: 0;
-            }
-            
-            .hero h1 {
-                font-size: 32px;
-            }
-            
-            .form-row {
-                grid-template-columns: 1fr;
-            }
+        ];
+        
+        // State
+        let cart = [];
+        let currentRestaurant = null;
+        
+        // Navigation
+        function showPage(pageId) {
+            document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+            document.getElementById(pageId).classList.add('active');
+            window.scrollTo(0, 0);
         }
         
-        .hidden { display: none !important; }
-        .text-center { text-align: center; }
-        .mt-4 { margin-top: 16px; }
-        .mb-4 { margin-bottom: 16px; }
-        .w-full { width: 100%; }
-        
-        .toast {
-            position: fixed;
-            bottom: 24px;
-            right: 24px;
-            background: var(--text);
-            color: white;
-            padding: 16px 24px;
-            border-radius: 8px;
-            box-shadow: var(--shadow-lg);
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            z-index: 1000;
-            transform: translateY(100px);
-            opacity: 0;
-            transition: all 0.3s;
+        // Enter Food App
+        function enterFoodApp() {
+            showPage('foodApp');
+            renderRestaurants(restaurants);
+            setupCategories();
+            setupSearch();
         }
         
-        .toast.show {
-            transform: translateY(0);
-            opacity: 1;
+        // Role Selection
+        function selectRole(role) {
+            document.body.className = `role-${role}`;
+            
+            if (role === 'eater') showPage('eaterSignup');
+            else if (role === 'driver') showPage('driverSignup');
+            else if (role === 'merchant') showPage('merchantSignup');
+            else if (role === 'admin') showPage('adminDashboard');
         }
         
-        .toast i {
-            color: var(--success);
-        }
-
-        /* FOOD ORDERING APP STYLES */
-        .food-app-header {
-            background: var(--card-bg);
-            padding: 16px 20px;
-            position: sticky;
-            top: 0;
-            z-index: 100;
-            box-shadow: var(--shadow);
-        }
-
-        .location-bar {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            margin-bottom: 12px;
-            color: var(--text-secondary);
-            font-size: 14px;
-        }
-
-        .location-bar i {
-            color: var(--primary);
-        }
-
-        .location-bar strong {
-            color: var(--text);
-            margin-left: 4px;
-        }
-
-        .search-bar {
-            position: relative;
-        }
-
-        .search-bar input {
-            width: 100%;
-            padding: 12px 16px 12px 44px;
-            border: 1px solid var(--border);
-            border-radius: 24px;
-            font-size: 15px;
-            background: var(--bg);
-            outline: none;
-            transition: all 0.2s;
-        }
-
-        .search-bar input:focus {
-            border-color: var(--primary);
-            background: var(--card-bg);
-        }
-
-        .search-bar i {
-            position: absolute;
-            left: 16px;
-            top: 50%;
-            transform: translateY(-50%);
-            color: var(--text-secondary);
-        }
-
-        .categories {
-            padding: 20px;
-            background: var(--card-bg);
-            margin-bottom: 8px;
-        }
-
-        .category-scroll {
-            display: flex;
-            gap: 16px;
-            overflow-x: auto;
-            scrollbar-width: none;
-            -ms-overflow-style: none;
-            padding-bottom: 8px;
-        }
-
-        .category-scroll::-webkit-scrollbar {
-            display: none;
-        }
-
-        .category-item {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 6px;
-            min-width: 64px;
-            cursor: pointer;
-            transition: transform 0.2s;
-        }
-
-        .category-item:active {
-            transform: scale(0.95);
-        }
-
-        .category-icon {
-            width: 56px;
-            height: 56px;
-            border-radius: 50%;
-            background: linear-gradient(135deg, #FFF5F2 0%, #FFEBE6 100%);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 24px;
-            border: 2px solid transparent;
-            transition: all 0.2s;
-        }
-
-        .category-item.active .category-icon {
-            border-color: var(--primary);
-            background: var(--primary);
-            color: white;
-        }
-
-        .category-item.active .category-icon {
-            color: white;
-        }
-
-        .category-name {
-            font-size: 12px;
-            font-weight: 500;
-            color: var(--text-secondary);
-        }
-
-        .category-item.active .category-name {
-            color: var(--primary);
-            font-weight: 600;
-        }
-
-        .promo-banner {
-            margin: 0 20px 20px;
-            background: linear-gradient(135deg, var(--secondary) 0%, #006BA8 100%);
-            border-radius: 16px;
-            padding: 20px;
-            color: white;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .promo-banner::before {
-            content: "🇳🇿";
-            position: absolute;
-            right: -10px;
-            top: -10px;
-            font-size: 80px;
-            opacity: 0.1;
-        }
-
-        .promo-tag {
-            display: inline-block;
-            background: rgba(255,255,255,0.2);
-            padding: 4px 12px;
-            border-radius: 20px;
-            font-size: 12px;
-            font-weight: 600;
-            margin-bottom: 8px;
-            backdrop-filter: blur(10px);
-        }
-
-        .promo-title {
-            font-size: 20px;
-            font-weight: 700;
-            margin-bottom: 4px;
-            position: relative;
-            z-index: 1;
-        }
-
-        .promo-subtitle {
-            font-size: 14px;
-            opacity: 0.9;
-            position: relative;
-            z-index: 1;
-        }
-
-        .section-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 0 20px;
-            margin-bottom: 16px;
-        }
-
-        .section-title {
-            font-size: 20px;
-            font-weight: 700;
-        }
-
-        .see-all {
-            color: var(--primary);
-            font-size: 14px;
-            font-weight: 600;
-            cursor: pointer;
-        }
-
-        .restaurants-section {
-            padding: 0 20px;
-        }
-
-        .restaurant-card {
-            background: var(--card-bg);
-            border-radius: 16px;
-            overflow: hidden;
-            margin-bottom: 16px;
-            box-shadow: var(--shadow);
-            cursor: pointer;
-            transition: transform 0.2s, box-shadow 0.2s;
-        }
-
-        .restaurant-card:active {
-            transform: scale(0.98);
-        }
-
-        .restaurant-image {
-            width: 100%;
-            height: 180px;
-            object-fit: cover;
-            position: relative;
-        }
-
-        .restaurant-badge {
-            position: absolute;
-            top: 12px;
-            left: 12px;
-            background: var(--success);
-            color: white;
-            padding: 4px 12px;
-            border-radius: 20px;
-            font-size: 12px;
-            font-weight: 600;
-        }
-
-        .restaurant-info {
-            padding: 16px;
-        }
-
-        .restaurant-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: start;
-            margin-bottom: 8px;
-        }
-
-        .restaurant-name {
-            font-size: 18px;
-            font-weight: 700;
-            margin-bottom: 4px;
-        }
-
-        .restaurant-meta {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            font-size: 14px;
-            color: var(--text-secondary);
-        }
-
-        .rating {
-            display: flex;
-            align-items: center;
-            gap: 4px;
-            color: var(--text);
-            font-weight: 600;
-        }
-
-        .rating i {
-            color: #FFB800;
-        }
-
-        .delivery-info {
-            display: flex;
-            align-items: center;
-            gap: 16px;
-            margin-top: 12px;
-            padding-top: 12px;
-            border-top: 1px solid var(--border);
-            font-size: 13px;
-            color: var(--text-secondary);
-        }
-
-        .delivery-info i {
-            color: var(--primary);
-            margin-right: 4px;
-        }
-
-        .menu-header {
-            position: relative;
-            height: 200px;
-            overflow: hidden;
-        }
-
-        .menu-header img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
-
-        .menu-header-overlay {
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            height: 100%;
-            background: linear-gradient(to top, rgba(0,0,0,0.7) 0%, transparent 60%);
-        }
-
-        .back-btn {
-            position: absolute;
-            top: 16px;
-            left: 16px;
-            width: 40px;
-            height: 40px;
-            background: rgba(255,255,255,0.9);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            border: none;
-            font-size: 18px;
-            z-index: 10;
-        }
-
-        .menu-restaurant-info {
-            position: absolute;
-            bottom: 20px;
-            left: 20px;
-            right: 20px;
-            color: white;
-        }
-
-        .menu-restaurant-name {
-            font-size: 24px;
-            font-weight: 700;
-            margin-bottom: 8px;
-        }
-
-        .menu-meta {
-            display: flex;
-            gap: 16px;
-            font-size: 14px;
-            opacity: 0.9;
-        }
-
-        .menu-categories {
-            display: flex;
-            gap: 12px;
-            padding: 16px 20px;
-            background: var(--card-bg);
-            overflow-x: auto;
-            scrollbar-width: none;
-            border-bottom: 1px solid var(--border);
-            position: sticky;
-            top: 0;
-            z-index: 50;
-        }
-
-        .menu-categories::-webkit-scrollbar {
-            display: none;
-        }
-
-        .menu-category {
-            padding: 8px 16px;
-            border-radius: 20px;
-            font-size: 14px;
-            font-weight: 500;
-            white-space: nowrap;
-            cursor: pointer;
-            background: var(--bg);
-            color: var(--text-secondary);
-            transition: all 0.2s;
-        }
-
-        .menu-category.active {
-            background: var(--primary);
-            color: white;
-        }
-
-        .menu-section {
-            padding: 20px;
-        }
-
-        .menu-section-title {
-            font-size: 18px;
-            font-weight: 700;
-            margin-bottom: 16px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .menu-item {
-            display: flex;
-            gap: 16px;
-            padding: 16px;
-            background: var(--card-bg);
-            border-radius: 12px;
-            margin-bottom: 12px;
-            box-shadow: var(--shadow);
-            cursor: pointer;
-            transition: transform 0.2s;
-        }
-
-        .menu-item:active {
-            transform: scale(0.98);
-        }
-
-        .menu-item-image {
-            width: 100px;
-            height: 100px;
-            border-radius: 12px;
-            object-fit: cover;
-            flex-shrink: 0;
-        }
-
-        .menu-item-details {
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-        }
-
-        .menu-item-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: start;
-        }
-
-        .menu-item-name {
-            font-size: 16px;
-            font-weight: 600;
-            margin-bottom: 4px;
-            line-height: 1.3;
-        }
-
-        .menu-item-desc {
-            font-size: 13px;
-            color: var(--text-secondary);
-            line-height: 1.4;
-            display: -webkit-box;
-            -webkit-line-clamp: 2;
-            -webkit-box-orient: vertical;
-            overflow: hidden;
-        }
-
-        .menu-item-price {
-            font-size: 16px;
-            font-weight: 700;
-            color: var(--primary);
-        }
-
-        .add-btn {
-            width: 32px;
-            height: 32px;
-            border-radius: 50%;
-            background: var(--primary);
-            color: white;
-            border: none;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            font-size: 16px;
-            transition: transform 0.2s;
-        }
-
-        .add-btn:active {
-            transform: scale(0.9);
-        }
-
-        .cart-bar {
-            position: fixed;
-            bottom: 80px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: calc(100% - 40px);
-            max-width: 440px;
-            background: var(--nz-black);
-            color: white;
-            padding: 16px 20px;
-            border-radius: 12px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            box-shadow: var(--shadow-lg);
-            z-index: 90;
-            cursor: pointer;
-            transition: transform 0.3s;
-        }
-
-        .cart-bar.hidden {
-            transform: translateX(-50%) translateY(200%);
-        }
-
-        .cart-info {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
-
-        .cart-count {
-            background: var(--primary);
-            width: 28px;
-            height: 28px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: 700;
-            font-size: 14px;
-        }
-
-        .cart-text {
-            font-weight: 600;
-        }
-
-        .cart-total {
-            font-weight: 700;
-            font-size: 18px;
-        }
-
-        .cart-page {
-            background: var(--bg);
-            min-height: 100vh;
-        }
-
-        .cart-header {
-            background: var(--card-bg);
-            padding: 20px;
-            display: flex;
-            align-items: center;
-            gap: 16px;
-            position: sticky;
-            top: 0;
-            z-index: 100;
-            box-shadow: var(--shadow);
-        }
-
-        .cart-title {
-            font-size: 20px;
-            font-weight: 700;
-        }
-
-        .cart-items {
-            padding: 20px;
-        }
-
-        .cart-item {
-            display: flex;
-            gap: 16px;
-            background: var(--card-bg);
-            padding: 16px;
-            border-radius: 12px;
-            margin-bottom: 12px;
-            box-shadow: var(--shadow);
-        }
-
-        .cart-item-image {
-            width: 80px;
-            height: 80px;
-            border-radius: 8px;
-            object-fit: cover;
-        }
-
-        .cart-item-details {
-            flex: 1;
-        }
-
-        .cart-item-name {
-            font-weight: 600;
-            margin-bottom: 4px;
-        }
-
-        .cart-item-price {
-            color: var(--text-secondary);
-            font-size: 14px;
-        }
-
-        .quantity-control {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            margin-top: 12px;
-        }
-
-        .qty-btn {
-            width: 28px;
-            height: 28px;
-            border-radius: 50%;
-            border: 1px solid var(--border);
-            background: white;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            font-size: 14px;
-            transition: all 0.2s;
-        }
-
-        .qty-btn:active {
-            background: var(--bg);
-        }
-
-        .qty-value {
-            font-weight: 600;
-            min-width: 24px;
-            text-align: center;
-        }
-
-        .cart-summary {
-            background: var(--card-bg);
-            margin: 0 20px 20px;
-            padding: 20px;
-            border-radius: 12px;
-            box-shadow: var(--shadow);
-        }
-
-        .summary-row {
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: 12px;
-            font-size: 15px;
-        }
-
-        .summary-row.total {
-            font-size: 18px;
-            font-weight: 700;
-            padding-top: 12px;
-            border-top: 1px solid var(--border);
-            margin-top: 12px;
-        }
-
-        .checkout-btn {
-            background: var(--primary);
-            color: white;
-            border: none;
-            width: 100%;
-            padding: 16px;
-            border-radius: 12px;
-            font-size: 16px;
-            font-weight: 700;
-            cursor: pointer;
-            margin: 0 20px 20px;
-            width: calc(100% - 40px);
-            transition: transform 0.2s;
-        }
-
-        .checkout-btn:active {
-            transform: scale(0.98);
-            background: var(--primary-dark);
-        }
-
-        .bottom-nav {
-            position: fixed;
-            bottom: 0;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 100%;
-            max-width: 480px;
-            background: var(--card-bg);
-            display: flex;
-            justify-content: space-around;
-            padding: 12px 0 24px;
-            box-shadow: 0 -4px 20px rgba(0,0,0,0.08);
-            z-index: 100;
-            border-top: 1px solid var(--border);
-        }
-
-        .nav-item {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 4px;
-            color: var(--text-secondary);
-            text-decoration: none;
-            font-size: 12px;
-            font-weight: 500;
-            cursor: pointer;
-            transition: color 0.2s;
-            flex: 1;
-        }
-
-        .nav-item.active {
-            color: var(--primary);
-        }
-
-        .nav-item i {
-            font-size: 24px;
-        }
-
-        .empty-state {
-            text-align: center;
-            padding: 60px 20px;
-            color: var(--text-secondary);
-        }
-
-        .empty-state i {
-            font-size: 64px;
-            margin-bottom: 16px;
-            color: var(--border);
-        }
-
-        .empty-state h3 {
-            color: var(--text);
-            margin-bottom: 8px;
-        }
-
-        @keyframes slideUp {
-            from {
-                opacity: 0;
-                transform: translateY(20px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        .animate-in {
-            animation: slideUp 0.3s ease-out;
-        }
-
-        .kiwi-badge {
-            display: inline-flex;
-            align-items: center;
-            gap: 4px;
-            background: #E8F5E9;
-            color: var(--nz-green);
-            padding: 4px 8px;
-            border-radius: 12px;
-            font-size: 12px;
-            font-weight: 600;
-        }
-
-        .fern-icon {
-            color: var(--nz-green);
-        }
-
-        .nz-black {
-            color: var(--nz-black);
-        }
-    </style>
-</head>
-<body class="role-eater">
-    <div class="app-container">
-        <!-- LANDING PAGE -->
-        <div id="landingPage" class="page active">
-            <nav class="top-nav">
-                <div class="logo">
-                    <i class="fas fa-leaf"></i>
-                    KaiKart
-                </div>
-                <div class="nav-links">
-                    <a class="nav-link active" onclick="showRole('eater')">I'm Hungry</a>
-                    <a class="nav-link" onclick="showRole('driver')">Drive</a>
-                    <a class="nav-link" onclick="showRole('merchant')">Sell</a>
-                    <a class="nav-link" onclick="showRole('admin')">Admin</a>
-                    <button class="btn btn-primary" onclick="showPage('loginPage')">Sign In</button>
-                </div>
-            </nav>
+        function showRole(role) {
+            document.querySelectorAll('.role-card').forEach(c => c.classList.remove('active'));
+            document.querySelector(`.role-card.${role}`).classList.add('active');
             
-            <section class="hero" id="heroSection">
-                <div class="hero-content">
-                    <h1>Craving Kiwi Favourites?</h1>
-                    <p>Get your favourite local kai delivered fast. From fish & chips to flat whites, we've got Aotearoa covered.</p>
-                    <div class="hero-cta">
-                        <button class="btn btn-white" onclick="enterFoodApp()">Order Now</button>
-                        <button class="btn btn-white-outline" onclick="showPage('eaterSignup')">Create Account</button>
-                    </div>
-                </div>
-            </section>
+            const hero = document.getElementById('heroSection');
+            const titles = {
+                eater: { title: 'Craving Kiwi Favourites?', subtitle: 'Get your favourite local kai delivered fast.', btn1: 'Order Now', btn2: 'Create Account' },
+                driver: { title: 'Drive & Earn with KaiKart', subtitle: 'Flexible hours, competitive pay, be your own boss.', btn1: 'Apply Now', btn2: 'Learn More' },
+                merchant: { title: 'Grow Your Business', subtitle: 'Join NZ\'s fastest growing food delivery platform.', btn1: 'Partner With Us', btn2: 'View Pricing' },
+                admin: { title: 'Platform Management', subtitle: 'Oversee operations, manage users, ensure quality.', btn1: 'Admin Login', btn2: 'Documentation' }
+            };
             
-            <section class="role-selector">
-                <div class="section-header">
-                    <h2>Choose Your Path</h2>
-                    <p>Join KaiKart in the way that suits you best</p>
-                </div>
-                
-                <div class="role-cards">
-                    <div class="role-card eater active" onclick="enterFoodApp()">
-                        <div class="role-icon">
-                            <i class="fas fa-utensils"></i>
-                        </div>
-                        <span class="role-badge">Most Popular</span>
-                        <h3>Food Lover</h3>
-                        <p>Order from the best local restaurants and cafes across New Zealand. Fast delivery, easy tracking.</p>
-                        <ul class="role-features">
-                            <li><i class="fas fa-check"></i> Browse 1000+ restaurants</li>
-                            <li><i class="fas fa-check"></i> Real-time tracking</li>
-                            <li><i class="fas fa-check"></i> Save favourites</li>
-                            <li><i class="fas fa-check"></i> Exclusive deals</li>
-                        </ul>
-                        <button class="btn btn-primary w-full">Start Ordering</button>
-                    </div>
-                    
-                    <div class="role-card driver" onclick="selectRole('driver')">
-                        <div class="role-icon">
-                            <i class="fas fa-car"></i>
-                        </div>
-                        <h3>Delivery Driver</h3>
-                        <p>Be your own boss. Earn money delivering food on your schedule. Quick onboarding, weekly pay.</p>
-                        <ul class="role-features">
-                            <li><i class="fas fa-check"></i> Flexible hours</li>
-                            <li><i class="fas fa-check"></i> Weekly payments</li>
-                            <li><i class="fas fa-check"></i> Keep 100% of tips</li>
-                            <li><i class="fas fa-check"></i> Insurance included</li>
-                        </ul>
-                        <button class="btn btn-primary w-full">Apply Now</button>
-                    </div>
-                    
-                    <div class="role-card merchant" onclick="selectRole('merchant')">
-                        <div class="role-icon">
-                            <i class="fas fa-store"></i>
-                        </div>
-                        <h3>Restaurant Owner</h3>
-                        <p>Grow your business with New Zealand's fastest growing food platform. Full toolkit included.</p>
-                        <ul class="role-features">
-                            <li><i class="fas fa-check"></i> Free tablet & setup</li>
-                            <li><i class="fas fa-check"></i> Marketing tools</li>
-                            <li><i class="fas fa-check"></i> Analytics dashboard</li>
-                            <li><i class="fas fa-check"></i> 24/7 support</li>
-                        </ul>
-                        <button class="btn btn-primary w-full">Partner With Us</button>
-                    </div>
-                    
-                    <div class="role-card admin" onclick="selectRole('admin')">
-                        <div class="role-icon">
-                            <i class="fas fa-shield-alt"></i>
-                        </div>
-                        <h3>Platform Admin</h3>
-                        <p>Manage the marketplace, verify users, handle disputes, and oversee operations.</p>
-                        <ul class="role-features">
-                            <li><i class="fas fa-check"></i> User management</li>
-                            <li><i class="fas fa-check"></i> Verification tools</li>
-                            <li><i class="fas fa-check"></i> Analytics & reports</li>
-                            <li><i class="fas fa-check"></i> Dispute resolution</li>
-                        </ul>
-                        <button class="btn btn-primary w-full">Admin Access</button>
-                    </div>
-                </div>
-            </section>
-        </div>
-
-        <!-- FOOD ORDERING APP -->
-        <div id="foodApp" class="page">
-            <div class="food-app-header">
-                <div class="location-bar">
-                    <i class="fas fa-map-marker-alt"></i>
-                    <span>Deliver to</span>
-                    <strong>Auckland CBD <i class="fas fa-chevron-down" style="font-size: 12px; margin-left: 4px;"></i></strong>
-                </div>
-                <div class="search-bar">
-                    <i class="fas fa-search"></i>
-                    <input type="text" placeholder="Search for food, restaurants..." id="searchInput">
-                </div>
-            </div>
+            hero.querySelector('h1').textContent = titles[role].title;
+            hero.querySelector('p').textContent = titles[role].subtitle;
             
-            <div class="categories">
-                <div class="category-scroll" id="categoryList">
-                    <div class="category-item active" data-category="all">
-                        <div class="category-icon">🍽️</div>
-                        <span class="category-name">All</span>
-                    </div>
-                    <div class="category-item" data-category="burgers">
-                        <div class="category-icon">🍔</div>
-                        <span class="category-name">Burgers</span>
-                    </div>
-                    <div class="category-item" data-category="pizza">
-                        <div class="category-icon">🍕</div>
-                        <span class="category-name">Pizza</span>
-                    </div>
-                    <div class="category-item" data-category="sushi">
-                        <div class="category-icon">🍣</div>
-                        <span class="category-name">Sushi</span>
-                    </div>
-                    <div class="category-item" data-category="fish">
-                        <div class="category-icon">🐟</div>
-                        <span class="category-name">Fish & Chips</span>
-                    </div>
-                    <div class="category-item" data-category="cafe">
-                        <div class="category-icon">☕</div>
-                        <span class="category-name">Café</span>
-                    </div>
-                    <div class="category-item" data-category="indian">
-                        <div class="category-icon">🍛</div>
-                        <span class="category-name">Indian</span>
-                    </div>
-                    <div class="category-item" data-category="bakery">
-                        <div class="category-icon">🥧</div>
-                        <span class="category-name">Bakery</span>
-                    </div>
-                </div>
-            </div>
-            
-            <div class="promo-banner">
-                <span class="promo-tag">🇳🇿 KIWI SPECIAL</span>
-                <div class="promo-title">Free delivery this weekend!</div>
-                <div class="promo-subtitle">On orders over $25 across Auckland</div>
-            </div>
-            
-            <div class="section-header">
-                <h2 class="section-title">Popular near you</h2>
-                <span class="see-all">See all</span>
-            </div>
-            
-            <div class="restaurants-section" id="restaurantList">
-                <!-- Restaurants injected by JS -->
-            </div>
-
-            <!-- BOTTOM NAV -->
-            <div class="bottom-nav">
-                <div class="nav-item active" onclick="showFoodAppPage('home')">
-                    <i class="fas fa-home"></i>
-                    <span>Home</span>
-                </div>
-                <div class="nav-item" onclick="document.getElementById('searchInput').focus();">
-                    <i class="fas fa-search"></i>
-                    <span>Browse</span>
-                </div>
-                <div class="nav-item" onclick="showPage('cartPage')">
-                    <i class="fas fa-shopping-bag"></i>
-                    <span>Orders</span>
-                </div>
-                <div class="nav-item" onclick="showPage('landingPage')">
-                    <i class="fas fa-user"></i>
-                    <span>Account</span>
-                </div>
-            </div>
-
-            <!-- CART FLOATING BAR -->
-            <div class="cart-bar hidden" id="cartBar" onclick="showPage('cartPage')">
-                <div class="cart-info">
-                    <div class="cart-count" id="cartCount">0</div>
-                    <span class="cart-text">View Cart</span>
-                </div>
-                <span class="cart-total" id="cartTotal">$0.00</span>
-            </div>
-        </div>
-
-        <!-- MENU PAGE -->
-        <div id="menuPage" class="page">
-            <div class="menu-header">
-                <img id="menuImage" src="" alt="Restaurant">
-                <div class="menu-header-overlay"></div>
-                <button class="back-btn" onclick="showPage('foodApp')">
-                    <i class="fas fa-arrow-left"></i>
-                </button>
-                <div class="menu-restaurant-info">
-                    <h1 class="menu-restaurant-name" id="menuRestaurantName">Restaurant Name</h1>
-                    <div class="menu-meta">
-                        <span class="rating"><i class="fas fa-star"></i> <span id="menuRating">4.5</span></span>
-                        <span>•</span>
-                        <span id="menuTime">25-35 min</span>
-                        <span>•</span>
-                        <span id="menuDelivery">$5.99 delivery</span>
-                    </div>
-                </div>
-            </div>
-            
-            <div class="menu-categories">
-                <div class="menu-category active">Popular</div>
-                <div class="menu-category">Mains</div>
-                <div class="menu-category">Sides</div>
-                <div class="menu-category">Drinks</div>
-                <div class="menu-category">Desserts</div>
-            </div>
-            
-            <div class="menu-section">
-                <h3 class="menu-section-title">
-                    <span class="kiwi-badge"><i class="fas fa-leaf fern-icon"></i> Kiwi Faves</span>
-                </h3>
-                <div id="menuItems">
-                    <!-- Menu items injected by JS -->
-                </div>
-            </div>
-        </div>
-
-        <!-- CART PAGE -->
-        <div id="cartPage" class="page">
-            <div class="cart-header">
-                <button class="back-btn" onclick="showPage('foodApp')" style="position: static; background: transparent;">
-                    <i class="fas fa-arrow-left"></i>
-                </button>
-                <h1 class="cart-title">Your Order</h1>
-            </div>
-            
-            <div class="cart-items" id="cartItems">
-                <!-- Cart items injected by JS -->
-            </div>
-            
-            <div class="cart-summary">
-                <div class="summary-row">
-                    <span>Subtotal</span>
-                    <span id="subtotal">$0.00</span>
-                </div>
-                <div class="summary-row">
-                    <span>Delivery Fee</span>
-                    <span>$5.99</span>
-                </div>
-                <div class="summary-row">
-                    <span>Service Fee</span>
-                    <span>$2.99</span>
-                </div>
-                <div class="summary-row total">
-                    <span>Total</span>
-                    <span id="totalPrice">$0.00</span>
-                </div>
-            </div>
-            
-            <button class="checkout-btn" onclick="checkout()">
-                Checkout <i class="fas fa-arrow-right" style="margin-left: 8px;"></i>
-            </button>
-        </div>
+            document.body.className = `role-${role}`;
+        }
         
-        <!-- EATER SIGNUP -->
-        <div id="eaterSignup" class="page">
-            <nav class="top-nav">
-                <div class="logo" onclick="showPage('landingPage')">
-                    <i class="fas fa-leaf"></i>
-                    KaiKart
-                </div>
-                <div class="nav-links">
-                    <span style="color: var(--text-secondary)">Already have an account?</span>
-                    <button class="btn btn-outline" onclick="showPage('loginPage')">Sign In</button>
-                </div>
-            </nav>
-            
-            <div class="form-container">
-                <div class="form-header">
-                    <h2>Create Your Account</h2>
-                    <p>Join 500,000+ Kiwis ordering their favourite kai</p>
-                </div>
-                
-                <form onsubmit="handleEaterSignup(event)">
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label>First Name</label>
-                            <input type="text" placeholder="John" required>
-                        </div>
-                        <div class="form-group">
-                            <label>Last Name</label>
-                            <input type="text" placeholder="Smith" required>
-                        </div>
+        // Render Restaurants
+        function renderRestaurants(data) {
+            const container = document.getElementById('restaurantList');
+            container.innerHTML = data.map(r => `
+                <div class="restaurant-card animate-in" onclick="openRestaurant(${r.id})">
+                    <div style="position: relative;">
+                        <img src="${r.image}" alt="${r.name}" class="restaurant-image">
+                        ${r.tags.includes('Kiwi Owned') ? '<span class="restaurant-badge"><i class="fas fa-leaf"></i> Kiwi Owned</span>' : ''}
+                        ${r.tags.includes('Iconic') ? '<span class="restaurant-badge" style="background: var(--secondary)"><i class="fas fa-star"></i> Iconic</span>' : ''}
                     </div>
-                    
-                    <div class="form-group">
-                        <label>Email Address</label>
-                        <input type="email" placeholder="john@example.com" required>
-                    </div>
-                    
-                    <div class="form-group">
-                        <label>Mobile Number</label>
-                        <input type="tel" placeholder="021 123 4567" required>
-                    </div>
-                    
-                    <div class="form-group">
-                        <label>Password</label>
-                        <input type="password" placeholder="Min 8 characters" required>
-                    </div>
-                    
-                    <div class="form-group">
-                        <label>Delivery Address</label>
-                        <input type="text" placeholder="Start typing your address..." required>
-                    </div>
-                    
-                    <div class="checkbox-group">
-                        <input type="checkbox" id="terms" required>
-                        <label for="terms">I agree to the <a href="#">Terms of Service</a> and <a href="#">Privacy Policy</a>. I consent to receive marketing communications.</label>
-                    </div>
-                    
-                    <button type="submit" class="btn btn-primary w-full" style="padding: 14px; font-size: 16px;">
-                        Create Account
-                    </button>
-                </form>
-                
-                <div class="text-center mt-4" style="color: var(--text-secondary);">
-                    Or sign up with
-                </div>
-                
-                <div style="display: flex; gap: 12px; margin-top: 16px;">
-                    <button class="btn btn-outline w-full">
-                        <i class="fab fa-google"></i> Google
-                    </button>
-                    <button class="btn btn-outline w-full">
-                        <i class="fab fa-apple"></i> Apple
-                    </button>
-                </div>
-            </div>
-        </div>
-        
-        <!-- DRIVER ONBOARDING -->
-        <div id="driverSignup" class="page">
-            <nav class="top-nav" style="background: var(--driver); color: white;">
-                <div class="logo" onclick="showPage('landingPage')" style="color: white;">
-                    <i class="fas fa-leaf"></i>
-                    KaiKart Driver
-                </div>
-                <div class="nav-links">
-                    <button class="btn btn-ghost" style="color: white;" onclick="showPage('landingPage')">Exit</button>
-                </div>
-            </nav>
-            
-            <div style="max-width: 800px; margin: 40px auto; padding: 0 24px;">
-                <div class="form-header">
-                    <h2>Become a Delivery Partner</h2>
-                    <p>Complete the steps below to start earning</p>
-                </div>
-                
-                <div class="progress-steps">
-                    <div class="step active" id="step1">
-                        <div class="step-number">1</div>
-                        <span class="step-label">Personal</span>
-                    </div>
-                    <div class="step" id="step2">
-                        <div class="step-number">2</div>
-                        <span class="step-label">Documents</span>
-                    </div>
-                    <div class="step" id="step3">
-                        <div class="step-number">3</div>
-                        <span class="step-label">Vehicle</span>
-                    </div>
-                    <div class="step" id="step4">
-                        <div class="step-number">4</div>
-                        <span class="step-label">Background</span>
-                    </div>
-                </div>
-                
-                <!-- Step 1: Personal Info -->
-                <div id="driverStep1" class="form-container">
-                    <h3 style="margin-bottom: 24px;">Personal Information</h3>
-                    <form onsubmit="nextDriverStep(2); return false;">
-                        <div class="form-row">
-                            <div class="form-group">
-                                <label>First Name</label>
-                                <input type="text" required>
-                            </div>
-                            <div class="form-group">
-                                <label>Last Name</label>
-                                <input type="text" required>
-                            </div>
-                        </div>
-                        
-                        <div class="form-group">
-                            <label>Email</label>
-                            <input type="email" required>
-                        </div>
-                        
-                        <div class="form-group">
-                            <label>Mobile</label>
-                            <input type="tel" placeholder="021 123 4567" required>
-                        </div>
-                        
-                        <div class="form-group">
-                            <label>Date of Birth</label>
-                            <input type="date" required>
-                        </div>
-                        
-                        <div class="form-group">
-                            <label>City</label>
-                            <select required>
-                                <option>Auckland</option>
-                                <option>Wellington</option>
-                                <option>Christchurch</option>
-                                <option>Hamilton</option>
-                                <option>Tauranga</option>
-                                <option>Dunedin</option>
-                            </select>
-                        </div>
-                        
-                        <button type="submit" class="btn btn-primary w-full" style="padding: 14px;">
-                            Continue <i class="fas fa-arrow-right"></i>
-                        </button>
-                    </form>
-                </div>
-                
-                <!-- Step 2: Documents -->
-                <div id="driverStep2" class="form-container hidden">
-                    <h3 style="margin-bottom: 24px;">Verify Your Identity</h3>
-                    
-                    <div class="upload-zone" onclick="simulateUpload(this)" style="margin-bottom: 20px;">
-                        <i class="fas fa-id-card"></i>
-                        <p><strong>Upload Driver's Licence</strong></p>
-                        <p class="upload-hint">Front and back photos required</p>
-                    </div>
-                    
-                    <div class="upload-zone" onclick="simulateUpload(this)" style="margin-bottom: 20px;">
-                        <i class="fas fa-passport"></i>
-                        <p><strong>Proof of Address</strong></p>
-                        <p class="upload-hint">Utility bill or bank statement (PDF/JPG)</p>
-                    </div>
-                    
-                    <div class="upload-zone" onclick="simulateUpload(this)">
-                        <i class="fas fa-camera"></i>
-                        <p><strong>Selfie Verification</strong></p>
-                        <p class="upload-hint">Take a photo holding your ID</p>
-                    </div>
-                    
-                    <div style="display: flex; gap: 12px; margin-top: 24px;">
-                        <button class="btn btn-outline w-full" onclick="prevDriverStep(1)">Back</button>
-                        <button class="btn btn-primary w-full" onclick="nextDriverStep(3)">Continue</button>
-                    </div>
-                </div>
-                
-                <!-- Step 3: Vehicle -->
-                <div id="driverStep3" class="form-container hidden">
-                    <h3 style="margin-bottom: 24px;">Vehicle Information</h3>
-                    
-                    <div class="form-group">
-                        <label>Vehicle Type</label>
-                        <select required>
-                            <option>Car</option>
-                            <option>Motorcycle/Scooter</option>
-                            <option>Bicycle</option>
-                            <option>Van</option>
-                        </select>
-                    </div>
-                    
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label>Make</label>
-                            <input type="text" placeholder="Toyota">
-                        </div>
-                        <div class="form-group">
-                            <label>Model</label>
-                            <input type="text" placeholder="Corolla">
-                        </div>
-                    </div>
-                    
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label>Year</label>
-                            <input type="number" placeholder="2020">
-                        </div>
-                        <div class="form-group">
-                            <label>Registration</label>
-                            <input type="text" placeholder="ABC123">
-                        </div>
-                    </div>
-                    
-                    <div class="upload-zone" onclick="simulateUpload(this)" style="margin-bottom: 20px;">
-                        <i class="fas fa-file-alt"></i>
-                        <p><strong>Vehicle Registration</strong></p>
-                        <p class="upload-hint">Current WOF/COF certificate</p>
-                    </div>
-                    
-                    <div class="upload-zone" onclick="simulateUpload(this)">
-                        <i class="fas fa-shield-alt"></i>
-                        <p><strong>Insurance Certificate</strong></p>
-                        <p class="upload-hint">Comprehensive vehicle insurance</p>
-                    </div>
-                    
-                    <div style="display: flex; gap: 12px; margin-top: 24px;">
-                        <button class="btn btn-outline w-full" onclick="prevDriverStep(2)">Back</button>
-                        <button class="btn btn-primary w-full" onclick="nextDriverStep(4)">Continue</button>
-                    </div>
-                </div>
-                
-                <!-- Step 4: Background -->
-                <div id="driverStep4" class="form-container hidden">
-                    <h3 style="margin-bottom: 24px;">Background Check</h3>
-                    
-                    <div class="verification-card">
-                        <div class="verification-icon pending">
-                            <i class="fas fa-search"></i>
-                        </div>
-                        <div class="verification-content">
-                            <h4>Criminal Record Check</h4>
-                            <p>We conduct a NZ Police vetting check. This usually takes 3-5 business days.</p>
-                        </div>
-                        <button class="btn btn-outline verification-action">Authorize</button>
-                    </div>
-                    
-                    <div class="verification-card">
-                        <div class="verification-icon pending">
-                            <i class="fas fa-file-medical"></i>
-                        </div>
-                        <div class="verification-content">
-                            <h4>Medical Declaration</h4>
-                            <p>Confirm you are medically fit to drive commercially.</p>
-                        </div>
-                        <button class="btn btn-outline verification-action">Complete</button>
-                    </div>
-                    
-                    <div class="checkbox-group" style="margin: 24px 0;">
-                        <input type="checkbox" id="driverTerms" required>
-                        <label for="driverTerms">I consent to background checks and verify all information provided is accurate.</label>
-                    </div>
-                    
-                    <div style="display: flex; gap: 12px;">
-                        <button class="btn btn-outline w-full" onclick="prevDriverStep(3)">Back</button>
-                        <button class="btn btn-primary w-full" onclick="submitDriverApplication()">Submit Application</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-        
-        <!-- MERCHANT ONBOARDING -->
-        <div id="merchantSignup" class="page">
-            <nav class="top-nav" style="background: var(--merchant); color: white;">
-                <div class="logo" onclick="showPage('landingPage')" style="color: white;">
-                    <i class="fas fa-leaf"></i>
-                    KaiKart for Business
-                </div>
-            </nav>
-            
-            <div class="dashboard">
-                <div class="sidebar" style="background: #F3E5F5;">
-                    <div class="sidebar-logo" style="color: var(--merchant);">
-                        <i class="fas fa-store"></i>
-                        Merchant Portal
-                    </div>
-                    
-                    <div class="nav-section">
-                        <div class="nav-section-title">Setup Progress</div>
-                        <div class="nav-item active">
-                            <i class="fas fa-user"></i>
-                            <span>Business Profile</span>
-                        </div>
-                        <div class="nav-item">
-                            <i class="fas fa-file-contract"></i>
-                            <span>Legal Documents</span>
-                        </div>
-                        <div class="nav-item">
-                            <i class="fas fa-credit-card"></i>
-                            <span>Banking Details</span>
-                        </div>
-                        <div class="nav-item">
-                            <i class="fas fa-utensils"></i>
-                            <span>Menu Setup</span>
-                        </div>
-                        <div class="nav-item">
-                            <i class="fas fa-check-circle"></i>
-                            <span>Go Live</span>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="main-content">
-                    <div class="page-header">
-                        <div>
-                            <h1>Welcome to KaiKart</h1>
-                            <p style="color: var(--text-secondary);">Complete your business profile to start selling</p>
-                        </div>
-                        <div class="status-badge pending">
-                            <i class="fas fa-clock"></i> Setup in Progress
-                        </div>
-                    </div>
-                    
-                    <div style="display: grid; grid-template-columns: 2fr 1fr; gap: 24px;">
-                        <div>
-                            <div class="form-container" style="margin: 0 0 24px 0;">
-                                <h3 style="margin-bottom: 24px;">Business Information</h3>
-                                
-                                <form onsubmit="handleMerchantSignup(event)">
-                                    <div class="form-group">
-                                        <label>Business Name (as appears on registration)</label>
-                                        <input type="text" placeholder="The Burger Joint Ltd" required>
-                                    </div>
-                                    
-                                    <div class="form-row">
-                                        <div class="form-group">
-                                            <label>Business Type</label>
-                                            <select required>
-                                                <option>Limited Company</option>
-                                                <option>Sole Trader</option>
-                                                <option>Partnership</option>
-                                                <option>Trust</option>
-                                            </select>
-                                        </div>
-                                        <div class="form-group">
-                                            <label>NZBN / Business Number</label>
-                                            <input type="text" placeholder="942903..." required>
-                                        </div>
-                                    </div>
-                                    
-                                    <div class="form-group">
-                                        <label>Registered Address</label>
-                                        <input type="text" placeholder="123 Queen Street, Auckland" required>
-                                    </div>
-                                    
-                                    <div class="form-group">
-                                        <label>Trading Name (if different)</label>
-                                        <input type="text" placeholder="BurgerFuel Ponsonby">
-                                    </div>
-                                    
-                                    <div class="form-row">
-                                        <div class="form-group">
-                                            <label>Cuisine Type</label>
-                                            <select required>
-                                                <option>Burgers</option>
-                                                <option>Pizza</option>
-                                                <option>Sushi</option>
-                                                <option>Indian</option>
-                                                <option>Cafe</option>
-                                                <option>Bakery</option>
-                                                <option>Grocery</option>
-                                                <option>Other</option>
-                                            </select>
-                                        </div>
-                                        <div class="form-group">
-                                            <label>Contact Phone</label>
-                                            <input type="tel" required>
-                                        </div>
-                                    </div>
-                                    
-                                    <h3 style="margin: 32px 0 24px 0;">Owner/Director Details</h3>
-                                    
-                                    <div class="form-row">
-                                        <div class="form-group">
-                                            <label>First Name</label>
-                                            <input type="text" required>
-                                        </div>
-                                        <div class="form-group">
-                                            <label>Last Name</label>
-                                            <input type="text" required>
-                                        </div>
-                                    </div>
-                                    
-                                    <div class="form-group">
-                                        <label>Date of Birth</label>
-                                        <input type="date" required>
-                                    </div>
-                                    
-                                    <div class="form-group">
-                                        <label>Driver Licence or Passport Number</label>
-                                        <input type="text" required>
-                                    </div>
-                                    
-                                    <div class="upload-zone" onclick="simulateUpload(this)" style="margin: 24px 0;">
-                                        <i class="fas fa-cloud-upload-alt"></i>
-                                        <p><strong>Upload ID Document</strong></p>
-                                        <p class="upload-hint">Driver licence or passport photo</p>
-                                    </div>
-                                    
-                                    <button type="submit" class="btn btn-primary w-full" style="padding: 14px; margin-top: 24px;">
-                                        Save & Continue
-                                    </button>
-                                </form>
-                            </div>
-                        </div>
-                        
-                        <div>
-                            <div style="background: var(--card-bg); padding: 24px; border-radius: 12px; box-shadow: var(--shadow); margin-bottom: 24px;">
-                                <h4 style="margin-bottom: 16px;">What's Next?</h4>
-                                <div style="display: flex; flex-direction: column; gap: 16px;">
-                                    <div style="display: flex; align-items: center; gap: 12px; opacity: 0.5;">
-                                        <i class="fas fa-circle" style="font-size: 8px;"></i>
-                                        <span style="font-size: 14px;">Verify bank account</span>
-                                    </div>
-                                    <div style="display: flex; align-items: center; gap: 12px; opacity: 0.5;">
-                                        <i class="fas fa-circle" style="font-size: 8px;"></i>
-                                        <span style="font-size: 14px;">Upload menu items</span>
-                                    </div>
-                                    <div style="display: flex; align-items: center; gap: 12px; opacity: 0.5;">
-                                        <i class="fas fa-circle" style="font-size: 8px;"></i>
-                                        <span style="font-size: 14px;">Set delivery zones</span>
-                                    </div>
-                                    <div style="display: flex; align-items: center; gap: 12px; opacity: 0.5;">
-                                        <i class="fas fa-circle" style="font-size: 8px;"></i>
-                                        <span style="font-size: 14px;">Schedule onboarding call</span>
-                                    </div>
+                    <div class="restaurant-info">
+                        <div class="restaurant-header">
+                            <div>
+                                <h3 class="restaurant-name">${r.name}</h3>
+                                <div class="restaurant-meta">
+                                    <span class="rating"><i class="fas fa-star"></i> ${r.rating}</span>
+                                    <span>•</span>
+                                    <span>${r.category.charAt(0).toUpperCase() + r.category.slice(1)}</span>
+                                    <span>•</span>
+                                    <span>${r.tags[0]}</span>
                                 </div>
                             </div>
-                            
-                            <div style="background: #E8F5E9; padding: 24px; border-radius: 12px;">
-                                <h4 style="margin-bottom: 8px; color: var(--success);">
-                                    <i class="fas fa-headset"></i> Need Help?
-                                </h4>
-                                <p style="font-size: 14px; color: var(--text-secondary); margin-bottom: 16px;">
-                                    Our merchant success team is here to help you get set up.
-                                </p>
-                                <button class="btn btn-outline w-full">
-                                    <i class="fas fa-phone"></i> 0800 KAI KART
-                                </button>
-                            </div>
+                        </div>
+                        <div class="delivery-info">
+                            <span><i class="fas fa-clock"></i> ${r.time}</span>
+                            <span><i class="fas fa-motorcycle"></i> ${r.delivery} delivery</span>
+                            <span><i class="fas fa-check-circle" style="color: var(--success)"></i> Open</span>
                         </div>
                     </div>
                 </div>
-            </div>
-        </div>
+            `).join('');
+        }
         
-        <!-- ADMIN DASHBOARD -->
-        <div id="adminDashboard" class="page">
-            <nav class="top-nav" style="background: var(--admin); color: white;">
-                <div class="logo" style="color: white;">
-                    <i class="fas fa-leaf"></i>
-                    KaiKart Admin
+        // Setup Categories
+        function setupCategories() {
+            const items = document.querySelectorAll('.category-item');
+            items.forEach(item => {
+                item.addEventListener('click', () => {
+                    items.forEach(i => i.classList.remove('active'));
+                    item.classList.add('active');
+                    
+                    const category = item.dataset.category;
+                    if (category === 'all') {
+                        renderRestaurants(restaurants);
+                    } else {
+                        const filtered = restaurants.filter(r => r.category === category);
+                        renderRestaurants(filtered);
+                    }
+                });
+            });
+        }
+        
+        // Setup Search - THIS IS THE SEARCH FUNCTION
+        function setupSearch() {
+            const input = document.getElementById('searchInput');
+            input.addEventListener('input', (e) => {
+                const term = e.target.value.toLowerCase();
+                const filtered = restaurants.filter(r => 
+                    r.name.toLowerCase().includes(term) || 
+                    r.category.toLowerCase().includes(term)
+                );
+                renderRestaurants(filtered);
+            });
+        }
+        
+        // Open Restaurant
+        function openRestaurant(id) {
+            const restaurant = restaurants.find(r => r.id === id);
+            currentRestaurant = restaurant;
+            
+            document.getElementById('menuImage').src = restaurant.image;
+            document.getElementById('menuRestaurantName').textContent = restaurant.name;
+            document.getElementById('menuRating').textContent = restaurant.rating;
+            document.getElementById('menuTime').textContent = restaurant.time;
+            document.getElementById('menuDelivery').textContent = restaurant.delivery + ' delivery';
+            
+            const menuContainer = document.getElementById('menuItems');
+            menuContainer.innerHTML = restaurant.menu.map((item, index) => `
+                <div class="menu-item" onclick="addToCart(${index})">
+                    <img src="${item.image}" alt="${item.name}" class="menu-item-image">
+                    <div class="menu-item-details">
+                        <div>
+                            <div class="menu-item-header">
+                                <h4 class="menu-item-name">${item.name}</h4>
+                                <button class="add-btn" onclick="event.stopPropagation(); addToCart(${index})">
+                                    <i class="fas fa-plus"></i>
+                                </button>
+                            </div>
+                            <p class="menu-item-desc">${item.desc}</p>
+                        </div>
+                        <span class="menu-item-price">$${item.price.toFixed(2)}</span>
+                    </div>
                 </div>
-                <div class="nav
+            `).join('');
+            
+            showPage('menuPage');
+        }
+        
+        // Add to Cart
+        function addToCart(itemIndex) {
+            const item = currentRestaurant.menu[itemIndex];
+            const existing = cart.find(c => c.name === item.name && c.restaurant === currentRestaurant.name);
+            
+            if (existing) {
+                existing.qty++;
+            } else {
+                cart.push({
+                    ...item,
+                    restaurant: currentRestaurant.name,
+                    qty: 1
+                });
+            }
+            
+            updateCart();
+            
+            // Visual feedback
+            const btn = event.target.closest('.add-btn');
+            btn.style.transform = 'scale(0.8)';
+            setTimeout(() => btn.style.transform = 'scale(1)', 200);
+        }
+        
+        // Update Cart
+        function updateCart() {
+            const count = cart.reduce((sum, item) => sum + item.qty, 0);
+            const total = cart.reduce((sum, item) => sum + (item.price * item.qty), 0);
+            
+            document.getElementById('cartCount').textContent = count;
+            document.getElementById('cartTotal').textContent = '$' + total.toFixed(2);
+            document.getElementById('cartBar').classList.toggle('hidden', count === 0);
+            
+            // Update cart page
+            renderCart();
+        }
+        
+        // Render Cart
+        function renderCart() {
+            const container = document.getElementById('cartItems');
+            if (cart.length === 0) {
+                container.innerHTML = `
+                    <div class="empty-state">
+                        <i class="fas fa-shopping-basket"></i>
+                        <h3>Your cart is empty</h3>
+                        <p>Add some delicious Kiwi food to get started!</p>
+                    </div>
+                `;
+            } else {
+                container.innerHTML = cart.map((item, index) => `
+                    <div class="cart-item">
+                        <img src="${item.image}" alt="${item.name}" class="cart-item-image">
+                        <div class="cart-item-details">
+                            <div class="cart-item-name">${item.name}</div>
+                            <div class="cart-item-price">$${item.price.toFixed(2)} each</div>
+                            <div class="quantity-control">
+                                <button class="qty-btn" onclick="updateQty(${index}, -1)">-</button>
+                                <span class="qty-value">${item.qty}</span>
+                                <button class="qty-btn" onclick="updateQty(${index}, 1)">+</button>
+                            </div>
+                        </div>
+                        <div style="font-weight: 700; color: var(--primary);">
+                            $${(item.price * item.qty).toFixed(2)}
+                        </div>
+                    </div>
+                `).join('');
+            }
+            
+            const subtotal = cart.reduce((sum, item) => sum + (item.price * item.qty), 0);
+            const total = subtotal + 5.99 + 2.99;
+            document.getElementById('subtotal').textContent = '$' + subtotal.toFixed(2);
+            document.getElementById('totalPrice').textContent = '$' + total.toFixed(2);
+        }
+        
+        // Update Quantity
+        function updateQty(index, change) {
+            cart[index].qty += change;
+            if (cart[index].qty <= 0) {
+                cart.splice(index, 1);
+            }
+            updateCart();
+        }
+        
+        // Checkout
+        function checkout() {
+            if (cart.length === 0) return;
+            
+            alert('Order placed! Your KaiKart is on the way! 🚚🇳🇿');
+            cart = [];
+            updateCart();
+            showPage('foodApp');
+        }
+        
+        // Driver Onboarding Steps
+        let currentDriverStep = 1;
+        
+        function nextDriverStep(step) {
+            document.getElementById(`driverStep${currentDriverStep}`).classList.add('hidden');
+            document.getElementById(`driverStep${step}`).classList.remove('hidden');
+            
+            document.getElementById(`step${currentDriverStep}`).classList.remove('active');
+            document.getElementById(`step${currentDriverStep}`).classList.add('completed');
+            document.getElementById(`step${step}`).classList.add('active');
+            
+            currentDriverStep = step;
+            window.scrollTo(0, 0);
+        }
+        
+        function prevDriverStep(step) {
+            document.getElementById(`driverStep${currentDriverStep}`).classList.add('hidden');
+            document.getElementById(`driverStep${step}`).classList.remove('hidden');
+            
+            document.getElementById(`step${currentDriverStep}`).classList.remove('active');
+            document.getElementById(`step${step}`).classList.remove('completed');
+            document.getElementById(`step${step}`).classList.add('active');
+            
+            currentDriverStep = step;
+            window.scrollTo(0, 0);
+        }
+        
+        // Form Handlers
+        function handleEaterSignup(e) {
+            e.preventDefault();
+            showToast('Account created successfully! Welcome to KaiKart.');
+            setTimeout(() => enterFoodApp(), 2000);
+        }
+        
+        function handleMerchantSignup(e) {
+            e.preventDefault();
+            showToast('Business profile saved! Continue to banking setup.');
+        }
+        
+        function handleLogin(e) {
+            e.preventDefault();
+            showToast('Welcome back!');
+            setTimeout(() => showPage('landingPage'), 1000);
+        }
+        
+        function submitDriverApplication() {
+            showToast('Application submitted! We\'ll review within 3-5 days.');
+            setTimeout(() => showPage('landingPage'), 2000);
+        }
+        
+        // Utilities
+        function simulateUpload(element) {
+            element.innerHTML = '<i class="fas fa-spinner fa-spin" style="font-size: 48px; color: var(--primary);"></i><p><strong>Uploading...</strong></p>';
+            setTimeout(() => {
+                element.innerHTML = '<i class="fas fa-check-circle" style="font-size: 48px; color: var(--success);"></i><p><strong>Upload Complete!</strong></p><p class="upload-hint">File verified successfully</p>';
+                element.style.borderColor = 'var(--success)';
+                element.style.background = '#E8F5E9';
+            }, 1500);
+        }
+        
+        function showToast(message) {
+            const toast = document.getElementById('toast');
+            document.getElementById('toastMessage').textContent = message;
+            toast.classList.add('show');
+            setTimeout(() => toast.classList.remove('show'), 3000);
+        }
+        
+        // Initialize
+        document.addEventListener('DOMContentLoaded', () => {
+            // Check for hash in URL
+            const hash = window.location.hash.replace('#', '');
+            if (hash && document.getElementById(hash)) {
+                showPage(hash);
+            }
+        });
+    </script>
