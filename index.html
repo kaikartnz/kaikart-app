@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>KaiKart - Multi-Role Platform</title>
+    <title>KaiKart - NZ Food Delivery Platform</title>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
@@ -40,7 +40,6 @@
             line-height: 1.6;
         }
         
-        /* Role-Based Color Themes */
         body.role-eater { --primary: #FF6B35; }
         body.role-driver { --primary: var(--driver); }
         body.role-merchant { --primary: var(--merchant); }
@@ -52,7 +51,6 @@
             position: relative;
         }
         
-        /* Navigation */
         .top-nav {
             background: var(--card-bg);
             padding: 16px 24px;
@@ -72,6 +70,7 @@
             display: flex;
             align-items: center;
             gap: 8px;
+            cursor: pointer;
         }
         
         .nav-links {
@@ -128,7 +127,6 @@
             color: var(--text-secondary);
         }
         
-        /* Hero Section */
         .hero {
             background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
             color: white;
@@ -191,7 +189,6 @@
             font-size: 16px;
         }
         
-        /* Role Selector Cards */
         .role-selector {
             padding: 60px 24px;
             background: var(--bg);
@@ -301,7 +298,6 @@
             font-weight: 600;
         }
         
-        /* Page Sections */
         .page {
             display: none;
             min-height: 100vh;
@@ -318,7 +314,6 @@
             to { opacity: 1; transform: translateY(0); }
         }
         
-        /* Forms */
         .form-container {
             max-width: 480px;
             margin: 40px auto;
@@ -399,7 +394,6 @@
             text-decoration: none;
         }
         
-        /* Progress Steps */
         .progress-steps {
             display: flex;
             justify-content: space-between;
@@ -458,7 +452,6 @@
             color: var(--primary);
         }
         
-        /* Upload Zones */
         .upload-zone {
             border: 2px dashed var(--border);
             border-radius: 12px;
@@ -490,7 +483,6 @@
             color: #999;
         }
         
-        /* Dashboard Layout */
         .dashboard {
             display: grid;
             grid-template-columns: 260px 1fr;
@@ -570,7 +562,6 @@
             font-weight: 700;
         }
         
-        /* Stats Cards */
         .stats-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
@@ -624,7 +615,6 @@
             color: var(--danger);
         }
         
-        /* Tables */
         .data-table {
             background: var(--card-bg);
             border-radius: 12px;
@@ -726,7 +716,6 @@
             color: var(--text-secondary);
         }
         
-        /* Verification Steps */
         .verification-card {
             background: var(--card-bg);
             border-radius: 12px;
@@ -782,7 +771,6 @@
             margin-left: auto;
         }
         
-        /* Mobile Responsive */
         @media (max-width: 768px) {
             .dashboard {
                 grid-template-columns: 1fr;
@@ -805,14 +793,12 @@
             }
         }
         
-        /* Utility Classes */
         .hidden { display: none !important; }
         .text-center { text-align: center; }
         .mt-4 { margin-top: 16px; }
         .mb-4 { margin-bottom: 16px; }
         .w-full { width: 100%; }
         
-        /* Toast Notifications */
         .toast {
             position: fixed;
             bottom: 24px;
@@ -839,6 +825,741 @@
         .toast i {
             color: var(--success);
         }
+
+        /* FOOD ORDERING APP STYLES */
+        .food-app-header {
+            background: var(--card-bg);
+            padding: 16px 20px;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: var(--shadow);
+        }
+
+        .location-bar {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 12px;
+            color: var(--text-secondary);
+            font-size: 14px;
+        }
+
+        .location-bar i {
+            color: var(--primary);
+        }
+
+        .location-bar strong {
+            color: var(--text);
+            margin-left: 4px;
+        }
+
+        .search-bar {
+            position: relative;
+        }
+
+        .search-bar input {
+            width: 100%;
+            padding: 12px 16px 12px 44px;
+            border: 1px solid var(--border);
+            border-radius: 24px;
+            font-size: 15px;
+            background: var(--bg);
+            outline: none;
+            transition: all 0.2s;
+        }
+
+        .search-bar input:focus {
+            border-color: var(--primary);
+            background: var(--card-bg);
+        }
+
+        .search-bar i {
+            position: absolute;
+            left: 16px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-secondary);
+        }
+
+        .categories {
+            padding: 20px;
+            background: var(--card-bg);
+            margin-bottom: 8px;
+        }
+
+        .category-scroll {
+            display: flex;
+            gap: 16px;
+            overflow-x: auto;
+            scrollbar-width: none;
+            -ms-overflow-style: none;
+            padding-bottom: 8px;
+        }
+
+        .category-scroll::-webkit-scrollbar {
+            display: none;
+        }
+
+        .category-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 6px;
+            min-width: 64px;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+
+        .category-item:active {
+            transform: scale(0.95);
+        }
+
+        .category-icon {
+            width: 56px;
+            height: 56px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #FFF5F2 0%, #FFEBE6 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            border: 2px solid transparent;
+            transition: all 0.2s;
+        }
+
+        .category-item.active .category-icon {
+            border-color: var(--primary);
+            background: var(--primary);
+            color: white;
+        }
+
+        .category-item.active .category-icon {
+            color: white;
+        }
+
+        .category-name {
+            font-size: 12px;
+            font-weight: 500;
+            color: var(--text-secondary);
+        }
+
+        .category-item.active .category-name {
+            color: var(--primary);
+            font-weight: 600;
+        }
+
+        .promo-banner {
+            margin: 0 20px 20px;
+            background: linear-gradient(135deg, var(--secondary) 0%, #006BA8 100%);
+            border-radius: 16px;
+            padding: 20px;
+            color: white;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .promo-banner::before {
+            content: "🇳🇿";
+            position: absolute;
+            right: -10px;
+            top: -10px;
+            font-size: 80px;
+            opacity: 0.1;
+        }
+
+        .promo-tag {
+            display: inline-block;
+            background: rgba(255,255,255,0.2);
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+            margin-bottom: 8px;
+            backdrop-filter: blur(10px);
+        }
+
+        .promo-title {
+            font-size: 20px;
+            font-weight: 700;
+            margin-bottom: 4px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .promo-subtitle {
+            font-size: 14px;
+            opacity: 0.9;
+            position: relative;
+            z-index: 1;
+        }
+
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 20px;
+            margin-bottom: 16px;
+        }
+
+        .section-title {
+            font-size: 20px;
+            font-weight: 700;
+        }
+
+        .see-all {
+            color: var(--primary);
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .restaurants-section {
+            padding: 0 20px;
+        }
+
+        .restaurant-card {
+            background: var(--card-bg);
+            border-radius: 16px;
+            overflow: hidden;
+            margin-bottom: 16px;
+            box-shadow: var(--shadow);
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .restaurant-card:active {
+            transform: scale(0.98);
+        }
+
+        .restaurant-image {
+            width: 100%;
+            height: 180px;
+            object-fit: cover;
+            position: relative;
+        }
+
+        .restaurant-badge {
+            position: absolute;
+            top: 12px;
+            left: 12px;
+            background: var(--success);
+            color: white;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .restaurant-info {
+            padding: 16px;
+        }
+
+        .restaurant-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: start;
+            margin-bottom: 8px;
+        }
+
+        .restaurant-name {
+            font-size: 18px;
+            font-weight: 700;
+            margin-bottom: 4px;
+        }
+
+        .restaurant-meta {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 14px;
+            color: var(--text-secondary);
+        }
+
+        .rating {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            color: var(--text);
+            font-weight: 600;
+        }
+
+        .rating i {
+            color: #FFB800;
+        }
+
+        .delivery-info {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            margin-top: 12px;
+            padding-top: 12px;
+            border-top: 1px solid var(--border);
+            font-size: 13px;
+            color: var(--text-secondary);
+        }
+
+        .delivery-info i {
+            color: var(--primary);
+            margin-right: 4px;
+        }
+
+        .menu-header {
+            position: relative;
+            height: 200px;
+            overflow: hidden;
+        }
+
+        .menu-header img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .menu-header-overlay {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 100%;
+            background: linear-gradient(to top, rgba(0,0,0,0.7) 0%, transparent 60%);
+        }
+
+        .back-btn {
+            position: absolute;
+            top: 16px;
+            left: 16px;
+            width: 40px;
+            height: 40px;
+            background: rgba(255,255,255,0.9);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            border: none;
+            font-size: 18px;
+            z-index: 10;
+        }
+
+        .menu-restaurant-info {
+            position: absolute;
+            bottom: 20px;
+            left: 20px;
+            right: 20px;
+            color: white;
+        }
+
+        .menu-restaurant-name {
+            font-size: 24px;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+
+        .menu-meta {
+            display: flex;
+            gap: 16px;
+            font-size: 14px;
+            opacity: 0.9;
+        }
+
+        .menu-categories {
+            display: flex;
+            gap: 12px;
+            padding: 16px 20px;
+            background: var(--card-bg);
+            overflow-x: auto;
+            scrollbar-width: none;
+            border-bottom: 1px solid var(--border);
+            position: sticky;
+            top: 0;
+            z-index: 50;
+        }
+
+        .menu-categories::-webkit-scrollbar {
+            display: none;
+        }
+
+        .menu-category {
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: 500;
+            white-space: nowrap;
+            cursor: pointer;
+            background: var(--bg);
+            color: var(--text-secondary);
+            transition: all 0.2s;
+        }
+
+        .menu-category.active {
+            background: var(--primary);
+            color: white;
+        }
+
+        .menu-section {
+            padding: 20px;
+        }
+
+        .menu-section-title {
+            font-size: 18px;
+            font-weight: 700;
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .menu-item {
+            display: flex;
+            gap: 16px;
+            padding: 16px;
+            background: var(--card-bg);
+            border-radius: 12px;
+            margin-bottom: 12px;
+            box-shadow: var(--shadow);
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+
+        .menu-item:active {
+            transform: scale(0.98);
+        }
+
+        .menu-item-image {
+            width: 100px;
+            height: 100px;
+            border-radius: 12px;
+            object-fit: cover;
+            flex-shrink: 0;
+        }
+
+        .menu-item-details {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .menu-item-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: start;
+        }
+
+        .menu-item-name {
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 4px;
+            line-height: 1.3;
+        }
+
+        .menu-item-desc {
+            font-size: 13px;
+            color: var(--text-secondary);
+            line-height: 1.4;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        .menu-item-price {
+            font-size: 16px;
+            font-weight: 700;
+            color: var(--primary);
+        }
+
+        .add-btn {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: var(--primary);
+            color: white;
+            border: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-size: 16px;
+            transition: transform 0.2s;
+        }
+
+        .add-btn:active {
+            transform: scale(0.9);
+        }
+
+        .cart-bar {
+            position: fixed;
+            bottom: 80px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: calc(100% - 40px);
+            max-width: 440px;
+            background: var(--nz-black);
+            color: white;
+            padding: 16px 20px;
+            border-radius: 12px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: var(--shadow-lg);
+            z-index: 90;
+            cursor: pointer;
+            transition: transform 0.3s;
+        }
+
+        .cart-bar.hidden {
+            transform: translateX(-50%) translateY(200%);
+        }
+
+        .cart-info {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .cart-count {
+            background: var(--primary);
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 14px;
+        }
+
+        .cart-text {
+            font-weight: 600;
+        }
+
+        .cart-total {
+            font-weight: 700;
+            font-size: 18px;
+        }
+
+        .cart-page {
+            background: var(--bg);
+            min-height: 100vh;
+        }
+
+        .cart-header {
+            background: var(--card-bg);
+            padding: 20px;
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: var(--shadow);
+        }
+
+        .cart-title {
+            font-size: 20px;
+            font-weight: 700;
+        }
+
+        .cart-items {
+            padding: 20px;
+        }
+
+        .cart-item {
+            display: flex;
+            gap: 16px;
+            background: var(--card-bg);
+            padding: 16px;
+            border-radius: 12px;
+            margin-bottom: 12px;
+            box-shadow: var(--shadow);
+        }
+
+        .cart-item-image {
+            width: 80px;
+            height: 80px;
+            border-radius: 8px;
+            object-fit: cover;
+        }
+
+        .cart-item-details {
+            flex: 1;
+        }
+
+        .cart-item-name {
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+
+        .cart-item-price {
+            color: var(--text-secondary);
+            font-size: 14px;
+        }
+
+        .quantity-control {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-top: 12px;
+        }
+
+        .qty-btn {
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            border: 1px solid var(--border);
+            background: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-size: 14px;
+            transition: all 0.2s;
+        }
+
+        .qty-btn:active {
+            background: var(--bg);
+        }
+
+        .qty-value {
+            font-weight: 600;
+            min-width: 24px;
+            text-align: center;
+        }
+
+        .cart-summary {
+            background: var(--card-bg);
+            margin: 0 20px 20px;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: var(--shadow);
+        }
+
+        .summary-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 12px;
+            font-size: 15px;
+        }
+
+        .summary-row.total {
+            font-size: 18px;
+            font-weight: 700;
+            padding-top: 12px;
+            border-top: 1px solid var(--border);
+            margin-top: 12px;
+        }
+
+        .checkout-btn {
+            background: var(--primary);
+            color: white;
+            border: none;
+            width: 100%;
+            padding: 16px;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: 700;
+            cursor: pointer;
+            margin: 0 20px 20px;
+            width: calc(100% - 40px);
+            transition: transform 0.2s;
+        }
+
+        .checkout-btn:active {
+            transform: scale(0.98);
+            background: var(--primary-dark);
+        }
+
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100%;
+            max-width: 480px;
+            background: var(--card-bg);
+            display: flex;
+            justify-content: space-around;
+            padding: 12px 0 24px;
+            box-shadow: 0 -4px 20px rgba(0,0,0,0.08);
+            z-index: 100;
+            border-top: 1px solid var(--border);
+        }
+
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 4px;
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-size: 12px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: color 0.2s;
+            flex: 1;
+        }
+
+        .nav-item.active {
+            color: var(--primary);
+        }
+
+        .nav-item i {
+            font-size: 24px;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+            color: var(--text-secondary);
+        }
+
+        .empty-state i {
+            font-size: 64px;
+            margin-bottom: 16px;
+            color: var(--border);
+        }
+
+        .empty-state h3 {
+            color: var(--text);
+            margin-bottom: 8px;
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .animate-in {
+            animation: slideUp 0.3s ease-out;
+        }
+
+        .kiwi-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            background: #E8F5E9;
+            color: var(--nz-green);
+            padding: 4px 8px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .fern-icon {
+            color: var(--nz-green);
+        }
+
+        .nz-black {
+            color: var(--nz-black);
+        }
     </style>
 </head>
 <body class="role-eater">
@@ -864,7 +1585,7 @@
                     <h1>Craving Kiwi Favourites?</h1>
                     <p>Get your favourite local kai delivered fast. From fish & chips to flat whites, we've got Aotearoa covered.</p>
                     <div class="hero-cta">
-                        <button class="btn btn-white" onclick="showPage('eaterSignup')">Order Now</button>
+                        <button class="btn btn-white" onclick="enterFoodApp()">Order Now</button>
                         <button class="btn btn-white-outline" onclick="showPage('eaterSignup')">Create Account</button>
                     </div>
                 </div>
@@ -877,7 +1598,7 @@
                 </div>
                 
                 <div class="role-cards">
-                    <div class="role-card eater active" onclick="selectRole('eater')">
+                    <div class="role-card eater active" onclick="enterFoodApp()">
                         <div class="role-icon">
                             <i class="fas fa-utensils"></i>
                         </div>
@@ -890,7 +1611,7 @@
                             <li><i class="fas fa-check"></i> Save favourites</li>
                             <li><i class="fas fa-check"></i> Exclusive deals</li>
                         </ul>
-                        <button class="btn btn-primary w-full">Get Started</button>
+                        <button class="btn btn-primary w-full">Start Ordering</button>
                     </div>
                     
                     <div class="role-card driver" onclick="selectRole('driver')">
@@ -939,6 +1660,177 @@
                     </div>
                 </div>
             </section>
+        </div>
+
+        <!-- FOOD ORDERING APP -->
+        <div id="foodApp" class="page">
+            <div class="food-app-header">
+                <div class="location-bar">
+                    <i class="fas fa-map-marker-alt"></i>
+                    <span>Deliver to</span>
+                    <strong>Auckland CBD <i class="fas fa-chevron-down" style="font-size: 12px; margin-left: 4px;"></i></strong>
+                </div>
+                <div class="search-bar">
+                    <i class="fas fa-search"></i>
+                    <input type="text" placeholder="Search for food, restaurants..." id="searchInput">
+                </div>
+            </div>
+            
+            <div class="categories">
+                <div class="category-scroll" id="categoryList">
+                    <div class="category-item active" data-category="all">
+                        <div class="category-icon">🍽️</div>
+                        <span class="category-name">All</span>
+                    </div>
+                    <div class="category-item" data-category="burgers">
+                        <div class="category-icon">🍔</div>
+                        <span class="category-name">Burgers</span>
+                    </div>
+                    <div class="category-item" data-category="pizza">
+                        <div class="category-icon">🍕</div>
+                        <span class="category-name">Pizza</span>
+                    </div>
+                    <div class="category-item" data-category="sushi">
+                        <div class="category-icon">🍣</div>
+                        <span class="category-name">Sushi</span>
+                    </div>
+                    <div class="category-item" data-category="fish">
+                        <div class="category-icon">🐟</div>
+                        <span class="category-name">Fish & Chips</span>
+                    </div>
+                    <div class="category-item" data-category="cafe">
+                        <div class="category-icon">☕</div>
+                        <span class="category-name">Café</span>
+                    </div>
+                    <div class="category-item" data-category="indian">
+                        <div class="category-icon">🍛</div>
+                        <span class="category-name">Indian</span>
+                    </div>
+                    <div class="category-item" data-category="bakery">
+                        <div class="category-icon">🥧</div>
+                        <span class="category-name">Bakery</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="promo-banner">
+                <span class="promo-tag">🇳🇿 KIWI SPECIAL</span>
+                <div class="promo-title">Free delivery this weekend!</div>
+                <div class="promo-subtitle">On orders over $25 across Auckland</div>
+            </div>
+            
+            <div class="section-header">
+                <h2 class="section-title">Popular near you</h2>
+                <span class="see-all">See all</span>
+            </div>
+            
+            <div class="restaurants-section" id="restaurantList">
+                <!-- Restaurants injected by JS -->
+            </div>
+
+            <!-- BOTTOM NAV -->
+            <div class="bottom-nav">
+                <div class="nav-item active" onclick="showFoodAppPage('home')">
+                    <i class="fas fa-home"></i>
+                    <span>Home</span>
+                </div>
+                <div class="nav-item" onclick="document.getElementById('searchInput').focus();">
+                    <i class="fas fa-search"></i>
+                    <span>Browse</span>
+                </div>
+                <div class="nav-item" onclick="showPage('cartPage')">
+                    <i class="fas fa-shopping-bag"></i>
+                    <span>Orders</span>
+                </div>
+                <div class="nav-item" onclick="showPage('landingPage')">
+                    <i class="fas fa-user"></i>
+                    <span>Account</span>
+                </div>
+            </div>
+
+            <!-- CART FLOATING BAR -->
+            <div class="cart-bar hidden" id="cartBar" onclick="showPage('cartPage')">
+                <div class="cart-info">
+                    <div class="cart-count" id="cartCount">0</div>
+                    <span class="cart-text">View Cart</span>
+                </div>
+                <span class="cart-total" id="cartTotal">$0.00</span>
+            </div>
+        </div>
+
+        <!-- MENU PAGE -->
+        <div id="menuPage" class="page">
+            <div class="menu-header">
+                <img id="menuImage" src="" alt="Restaurant">
+                <div class="menu-header-overlay"></div>
+                <button class="back-btn" onclick="showPage('foodApp')">
+                    <i class="fas fa-arrow-left"></i>
+                </button>
+                <div class="menu-restaurant-info">
+                    <h1 class="menu-restaurant-name" id="menuRestaurantName">Restaurant Name</h1>
+                    <div class="menu-meta">
+                        <span class="rating"><i class="fas fa-star"></i> <span id="menuRating">4.5</span></span>
+                        <span>•</span>
+                        <span id="menuTime">25-35 min</span>
+                        <span>•</span>
+                        <span id="menuDelivery">$5.99 delivery</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="menu-categories">
+                <div class="menu-category active">Popular</div>
+                <div class="menu-category">Mains</div>
+                <div class="menu-category">Sides</div>
+                <div class="menu-category">Drinks</div>
+                <div class="menu-category">Desserts</div>
+            </div>
+            
+            <div class="menu-section">
+                <h3 class="menu-section-title">
+                    <span class="kiwi-badge"><i class="fas fa-leaf fern-icon"></i> Kiwi Faves</span>
+                </h3>
+                <div id="menuItems">
+                    <!-- Menu items injected by JS -->
+                </div>
+            </div>
+        </div>
+
+        <!-- CART PAGE -->
+        <div id="cartPage" class="page">
+            <div class="cart-header">
+                <button class="back-btn" onclick="showPage('foodApp')" style="position: static; background: transparent;">
+                    <i class="fas fa-arrow-left"></i>
+                </button>
+                <h1 class="cart-title">Your Order</h1>
+            </div>
+            
+            <div class="cart-items" id="cartItems">
+                <!-- Cart items injected by JS -->
+            </div>
+            
+            <div class="cart-summary">
+                <div class="summary-row">
+                    <span>Subtotal</span>
+                    <span id="subtotal">$0.00</span>
+                </div>
+                <div class="summary-row">
+                    <span>Delivery Fee</span>
+                    <span>$5.99</span>
+                </div>
+                <div class="summary-row">
+                    <span>Service Fee</span>
+                    <span>$2.99</span>
+                </div>
+                <div class="summary-row total">
+                    <span>Total</span>
+                    <span id="totalPrice">$0.00</span>
+                </div>
+            </div>
+            
+            <button class="checkout-btn" onclick="checkout()">
+                Checkout <i class="fas fa-arrow-right" style="margin-left: 8px;"></i>
+            </button>
         </div>
         
         <!-- EATER SIGNUP -->
@@ -1415,383 +2307,4 @@
                     <i class="fas fa-leaf"></i>
                     KaiKart Admin
                 </div>
-                <div class="nav-links" style="color: white;">
-                    <span style="opacity: 0.8;"><i class="fas fa-shield-alt"></i> Super Admin</span>
-                    <button class="btn btn-ghost" style="color: white;" onclick="showPage('landingPage')">
-                        <i class="fas fa-sign-out-alt"></i> Logout
-                    </button>
-                </div>
-            </nav>
-            
-            <div class="dashboard">
-                <div class="sidebar" style="background: #FFEBEE;">
-                    <div class="sidebar-logo" style="color: var(--admin);">
-                        <i class="fas fa-shield-alt"></i>
-                        Admin Console
-                    </div>
-                    
-                    <div class="nav-section">
-                        <div class="nav-section-title">Overview</div>
-                        <div class="nav-item active">
-                            <i class="fas fa-chart-line"></i>
-                            <span>Dashboard</span>
-                        </div>
-                        <div class="nav-item">
-                            <i class="fas fa-users"></i>
-                            <span>User Management</span>
-                        </div>
-                        <div class="nav-item">
-                            <i class="fas fa-check-double"></i>
-                            <span>Verifications</span>
-                        </div>
-                    </div>
-                    
-                    <div class="nav-section">
-                        <div class="nav-section-title">Operations</div>
-                        <div class="nav-item">
-                            <i class="fas fa-store"></i>
-                            <span>Merchants</span>
-                        </div>
-                        <div class="nav-item">
-                            <i class="fas fa-car"></i>
-                            <span>Drivers</span>
-                        </div>
-                        <div class="nav-item">
-                            <i class="fas fa-exclamation-triangle"></i>
-                            <span>Disputes</span>
-                        </div>
-                    </div>
-                    
-                    <div class="nav-section">
-                        <div class="nav-section-title">System</div>
-                        <div class="nav-item">
-                            <i class="fas fa-cog"></i>
-                            <span>Settings</span>
-                        </div>
-                        <div class="nav-item">
-                            <i class="fas fa-file-alt"></i>
-                            <span>Reports</span>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="main-content">
-                    <div class="page-header">
-                        <h1>Platform Overview</h1>
-                        <div style="display: flex; gap: 12px;">
-                            <button class="btn btn-outline">
-                                <i class="fas fa-download"></i> Export Report
-                            </button>
-                            <button class="btn btn-primary">
-                                <i class="fas fa-plus"></i> Add User
-                            </button>
-                        </div>
-                    </div>
-                    
-                    <div class="stats-grid">
-                        <div class="stat-card">
-                            <div class="stat-header">
-                                <span class="stat-title">Total Users</span>
-                                <div class="stat-icon" style="background: #E3F2FD; color: #1976D2;">
-                                    <i class="fas fa-users"></i>
-                                </div>
-                            </div>
-                            <div class="stat-value">24,592</div>
-                            <div class="stat-change">
-                                <i class="fas fa-arrow-up"></i> 12% this month
-                            </div>
-                        </div>
-                        
-                        <div class="stat-card">
-                            <div class="stat-header">
-                                <span class="stat-title">Active Drivers</span>
-                                <div class="stat-icon" style="background: #E8F5E9; color: var(--success);">
-                                    <i class="fas fa-car"></i>
-                                </div>
-                            </div>
-                            <div class="stat-value">1,847</div>
-                            <div class="stat-change">
-                                <i class="fas fa-arrow-up"></i> 8% this week
-                            </div>
-                        </div>
-                        
-                        <div class="stat-card">
-                            <div class="stat-header">
-                                <span class="stat-title">Partner Merchants</span>
-                                <div class="stat-icon" style="background: #F3E5F5; color: #7B1FA2;">
-                                    <i class="fas fa-store"></i>
-                                </div>
-                            </div>
-                            <div class="stat-value">892</div>
-                            <div class="stat-change">
-                                <i class="fas fa-arrow-up"></i> 24 new this week
-                            </div>
-                        </div>
-                        
-                        <div class="stat-card">
-                            <div class="stat-header">
-                                <span class="stat-title">Pending Verifications</span>
-                                <div class="stat-icon" style="background: #FFF3E0; color: var(--warning);">
-                                    <i class="fas fa-clock"></i>
-                                </div>
-                            </div>
-                            <div class="stat-value">156</div>
-                            <div class="stat-change negative">
-                                <i class="fas fa-exclamation-circle"></i> Requires attention
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div class="data-table">
-                        <div class="table-header">
-                            <h3>Recent Verifications Pending</h3>
-                            <button class="btn btn-outline">View All</button>
-                        </div>
-                        <table>
-                            <thead>
-                                <tr>
-                                    <th>User</th>
-                                    <th>Type</th>
-                                    <th>Submitted</th>
-                                    <th>Status</th>
-                                    <th>Action</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td>
-                                        <div class="user-info">
-                                            <div class="user-avatar">JD</div>
-                                            <div class="user-details">
-                                                <h4>John Doe</h4>
-                                                <span>Driver Application</span>
-                                            </div>
-                                        </div>
-                                    </td>
-                                    <td>Driver</td>
-                                    <td>2 hours ago</td>
-                                    <td><span class="status-badge pending">Pending Review</span></td>
-                                    <td><button class="btn btn-primary" style="padding: 6px 16px; font-size: 13px;">Review</button></td>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        <div class="user-info">
-                                            <div class="user-avatar" style="background: var(--merchant);">SB</div>
-                                            <div class="user-details">
-                                                <h4>Sarah's Bakery</h4>
-                                                <span>Merchant Onboarding</span>
-                                            </div>
-                                        </div>
-                                    </td>
-                                    <td>Merchant</td>
-                                    <td>5 hours ago</td>
-                                    <td><span class="status-badge pending">Docs Required</span></td>
-                                    <td><button class="btn btn-outline" style="padding: 6px 16px; font-size: 13px;">Request</button></td>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        <div class="user-info">
-                                            <div class="user-avatar" style="background: var(--success);">MW</div>
-                                            <div class="user-details">
-                                                <h4>Mike Wilson</h4>
-                                                <span>ID Verification</span>
-                                            </div>
-                                        </div>
-                                    </td>
-                                    <td>Driver</td>
-                                    <td>1 day ago</td>
-                                    <td><span class="status-badge active">Approved</span></td>
-                                    <td><button class="btn btn-ghost" style="padding: 6px 16px; font-size: 13px;">View</button></td>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        <div class="user-info">
-                                            <div class="user-avatar" style="background: var(--admin);">TC</div>
-                                            <div class="user-details">
-                                                <h4>Taco Casa Ltd</h4>
-                                                <span>Business Verification</span>
-                                            </div>
-                                        </div>
-                                    </td>
-                                    <td>Merchant</td>
-                                    <td>2 days ago</td>
-                                    <td><span class="status-badge suspended">Rejected</span></td>
-                                    <td><button class="btn btn-outline" style="padding: 6px 16px; font-size: 13px;">Appeal</button></td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
-        </div>
-        
-        <!-- LOGIN PAGE -->
-        <div id="loginPage" class="page">
-            <nav class="top-nav">
-                <div class="logo" onclick="showPage('landingPage')">
-                    <i class="fas fa-leaf"></i>
-                    KaiKart
-                </div>
-            </nav>
-            
-            <div class="form-container" style="max-width: 420px; margin-top: 60px;">
-                <div class="form-header">
-                    <h2>Welcome Back</h2>
-                    <p>Sign in to your KaiKart account</p>
-                </div>
-                
-                <form onsubmit="handleLogin(event)">
-                    <div class="form-group">
-                        <label>Email or Mobile</label>
-                        <input type="text" placeholder="john@example.com" required>
-                    </div>
-                    
-                    <div class="form-group">
-                        <label>Password</label>
-                        <input type="password" placeholder="••••••••" required>
-                    </div>
-                    
-                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px;">
-                        <label style="display: flex; align-items: center; gap: 8px; font-size: 14px; cursor: pointer;">
-                            <input type="checkbox"> Remember me
-                        </label>
-                        <a href="#" style="color: var(--primary); font-size: 14px; text-decoration: none;">Forgot password?</a>
-                    </div>
-                    
-                    <button type="submit" class="btn btn-primary w-full" style="padding: 14px; font-size: 16px;">
-                        Sign In
-                    </button>
-                </form>
-                
-                <div class="text-center" style="margin-top: 24px; color: var(--text-secondary);">
-                    Don't have an account? 
-                    <a href="#" onclick="showPage('eaterSignup')" style="color: var(--primary); text-decoration: none; font-weight: 600;">Sign up</a>
-                </div>
-                
-                <div class="text-center mt-4" style="color: var(--text-secondary); font-size: 14px;">
-                    <p style="margin-bottom: 12px;">Admin access? <a href="#" onclick="showPage('adminDashboard')" style="color: var(--admin);">Login here</a></p>
-                </div>
-            </div>
-        </div>
-        
-        <!-- Toast Notification -->
-        <div id="toast" class="toast">
-            <i class="fas fa-check-circle"></i>
-            <span id="toastMessage">Success!</span>
-        </div>
-    </div>
-
-    <script>
-        // Navigation
-        function showPage(pageId) {
-            document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-            document.getElementById(pageId).classList.add('active');
-            window.scrollTo(0, 0);
-        }
-        
-        // Role Selection
-        function selectRole(role) {
-            document.body.className = `role-${role}`;
-            
-            if (role === 'eater') showPage('eaterSignup');
-            else if (role === 'driver') showPage('driverSignup');
-            else if (role === 'merchant') showPage('merchantSignup');
-            else if (role === 'admin') showPage('adminDashboard');
-        }
-        
-        function showRole(role) {
-            document.querySelectorAll('.role-card').forEach(c => c.classList.remove('active'));
-            document.querySelector(`.role-card.${role}`).classList.add('active');
-            
-            const hero = document.getElementById('heroSection');
-            const titles = {
-                eater: { title: 'Craving Kiwi Favourites?', subtitle: 'Get your favourite local kai delivered fast.', btn1: 'Order Now', btn2: 'Create Account' },
-                driver: { title: 'Drive & Earn with KaiKart', subtitle: 'Flexible hours, competitive pay, be your own boss.', btn1: 'Apply Now', btn2: 'Learn More' },
-                merchant: { title: 'Grow Your Business', subtitle: 'Join NZ\'s fastest growing food delivery platform.', btn1: 'Partner With Us', btn2: 'View Pricing' },
-                admin: { title: 'Platform Management', subtitle: 'Oversee operations, manage users, ensure quality.', btn1: 'Admin Login', btn2: 'Documentation' }
-            };
-            
-            hero.querySelector('h1').textContent = titles[role].title;
-            hero.querySelector('p').textContent = titles[role].subtitle;
-            
-            document.body.className = `role-${role}`;
-        }
-        
-        // Driver Onboarding Steps
-        let currentDriverStep = 1;
-        
-        function nextDriverStep(step) {
-            document.getElementById(`driverStep${currentDriverStep}`).classList.add('hidden');
-            document.getElementById(`driverStep${step}`).classList.remove('hidden');
-            
-            document.getElementById(`step${currentDriverStep}`).classList.remove('active');
-            document.getElementById(`step${currentDriverStep}`).classList.add('completed');
-            document.getElementById(`step${step}`).classList.add('active');
-            
-            currentDriverStep = step;
-            window.scrollTo(0, 0);
-        }
-        
-        function prevDriverStep(step) {
-            document.getElementById(`driverStep${currentDriverStep}`).classList.add('hidden');
-            document.getElementById(`driverStep${step}`).classList.remove('hidden');
-            
-            document.getElementById(`step${currentDriverStep}`).classList.remove('active');
-            document.getElementById(`step${step}`).classList.remove('completed');
-            document.getElementById(`step${step}`).classList.add('active');
-            
-            currentDriverStep = step;
-            window.scrollTo(0, 0);
-        }
-        
-        // Form Handlers
-        function handleEaterSignup(e) {
-            e.preventDefault();
-            showToast('Account created successfully! Welcome to KaiKart.');
-            setTimeout(() => showPage('landingPage'), 2000);
-        }
-        
-        function handleMerchantSignup(e) {
-            e.preventDefault();
-            showToast('Business profile saved! Continue to banking setup.');
-        }
-        
-        function handleLogin(e) {
-            e.preventDefault();
-            showToast('Welcome back!');
-            setTimeout(() => showPage('landingPage'), 1000);
-        }
-        
-        function submitDriverApplication() {
-            showToast('Application submitted! We\'ll review within 3-5 days.');
-            setTimeout(() => showPage('landingPage'), 2000);
-        }
-        
-        // Utilities
-        function simulateUpload(element) {
-            element.innerHTML = '<i class="fas fa-spinner fa-spin" style="font-size: 48px; color: var(--primary);"></i><p><strong>Uploading...</strong></p>';
-            setTimeout(() => {
-                element.innerHTML = '<i class="fas fa-check-circle" style="font-size: 48px; color: var(--success);"></i><p><strong>Upload Complete!</strong></p><p class="upload-hint">File verified successfully</p>';
-                element.style.borderColor = 'var(--success)';
-                element.style.background = '#E8F5E9';
-            }, 1500);
-        }
-        
-        function showToast(message) {
-            const toast = document.getElementById('toast');
-            document.getElementById('toastMessage').textContent = message;
-            toast.classList.add('show');
-            setTimeout(() => toast.classList.remove('show'), 3000);
-        }
-        
-        // Initialize
-        document.addEventListener('DOMContentLoaded', () => {
-            // Check for hash in URL
-            const hash = window.location.hash.replace('#', '');
-            if (hash && document.getElementById(hash)) {
-                showPage(hash);
-            }
-        });
-    </script>
-</body>
-</html>
+                <div class="nav
